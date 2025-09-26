@@ -9,8 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@capacitor/android": "^7.4.3",
     "@capacitor/cli": "^7.4.3",
     "@capacitor/core": "^7.4.3",
+    "@capacitor/ios": "^7.4.3",
     "next": "15.5.4",
     "react": "19.1.0",
     "react-dom": "19.1.0"

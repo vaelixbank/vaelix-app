@@ -8,12 +8,18 @@ importers:
 
   .:
     dependencies:
+      '@capacitor/android':
+        specifier: ^7.4.3
+        version: 7.4.3(@capacitor/core@7.4.3)
       '@capacitor/cli':
         specifier: ^7.4.3
         version: 7.4.3
       '@capacitor/core':
         specifier: ^7.4.3
         version: 7.4.3
+      '@capacitor/ios':
+        specifier: ^7.4.3
+        version: 7.4.3(@capacitor/core@7.4.3)
       next:
         specifier: 15.5.4
         version: 15.5.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -58,6 +64,11 @@ packages:
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
 
+  '@capacitor/android@7.4.3':
+    resolution: {integrity: sha512-VpjvnOcmYGPLgvXRhe3CGLs62Cg7sxOyp77NddCr+Y06qqgnoaj6OGeBVTc2DZlqZ6bSmh15JvFu82pkvmdgfQ==}
+    peerDependencies:
+      '@capacitor/core': ^7.4.0
+
   '@capacitor/cli@7.4.3':
     resolution: {integrity: sha512-SWozpdDgrbQ/ry1nIapugDFvE9z+l22BmU/+fpgL2Zv5487hGdXvCX5+1SluuFBP3IPpx6b4LjsKnBigyJoUWg==}
     engines: {node: '>=20.0.0'}
@@ -65,6 +76,11 @@ packages:
 
   '@capacitor/core@7.4.3':
     resolution: {integrity: sha512-wCWr8fQ9Wxn0466vPg7nMn0tivbNVjNy1yL4GvDSIZuZx7UpU2HeVGNe9QjN/quEd+YLRFeKEBLBw619VqUiNg==}
+
+  '@capacitor/ios@7.4.3':
+    resolution: {integrity: sha512-VNm7cHODgh3KK/4ZC2rXU9gBlvHii/mYFLI+XMXwq24nhB679QxHhz+pUuI7PatYoM2q4MAL0NR/dRgehKCaSA==}
+    peerDependencies:
+      '@capacitor/core': ^7.4.0
 
   '@emnapi/core@1.5.0':
     resolution: {integrity: sha512-sbP8GzB1WDzacS8fgNPpHlp6C9VZe+SJP3F90W9rLemaQj2PzIuTEl1qDOYQf58YIpyjViI24y9aPWCjEzY2cg==}
@@ -2125,6 +2141,10 @@ snapshots:
 
   '@alloc/quick-lru@5.2.0': {}
 
+  '@capacitor/android@7.4.3(@capacitor/core@7.4.3)':
+    dependencies:
+      '@capacitor/core': 7.4.3
+
   '@capacitor/cli@7.4.3':
     dependencies:
       '@ionic/cli-framework-output': 2.2.8
@@ -2150,6 +2170,10 @@ snapshots:
   '@capacitor/core@7.4.3':
     dependencies:
       tslib: 2.8.1
+
+  '@capacitor/ios@7.4.3(@capacitor/core@7.4.3)':
+    dependencies:
+      '@capacitor/core': 7.4.3
 
   '@emnapi/core@1.5.0':
     dependencies:
