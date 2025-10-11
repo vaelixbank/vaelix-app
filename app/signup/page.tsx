@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
+import { Icon } from '../../lib/icon';
 import { Eye, EyeOff, Lock, Mail, User, Shield } from 'lucide-react';
 
 export default function Signup() {
@@ -118,28 +119,28 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-white to-secondary/5 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-primary/10 via-gray-900 to-secondary/10 flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-8">
         {/* Logo */}
         <div className="text-center animate-fade-in-up">
           <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-            <Shield className="w-8 h-8 text-white" />
+            <Icon icon={Shield} size={32} className="text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">VaelixBank</h1>
-          <p className="text-gray-600 mt-2">Créez votre compte bancaire digital</p>
+          <h1 className="text-3xl font-bold text-gray-100">VaelixBank</h1>
+          <p className="text-gray-400 mt-2">Créez votre compte bancaire digital</p>
         </div>
 
         {/* Progress Indicator */}
         <div className="flex justify-center animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
           <div className="flex items-center space-x-4">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-              step >= 1 ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'
+              step >= 1 ? 'bg-primary text-white' : 'bg-gray-700 text-gray-400'
             }`}>
               1
             </div>
             <div className={`w-12 h-0.5 ${step >= 2 ? 'bg-primary' : 'bg-gray-200'}`} />
             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-              step >= 2 ? 'bg-primary text-white' : 'bg-gray-200 text-gray-600'
+              step >= 2 ? 'bg-primary text-white' : 'bg-gray-700 text-gray-400'
             }`}>
               2
             </div>
@@ -175,7 +176,7 @@ export default function Signup() {
                       Nom complet
                     </label>
                     <div className="relative">
-                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Icon icon={User} size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                       <Input
                         id="name"
                         type="text"
@@ -193,7 +194,7 @@ export default function Signup() {
                       Adresse email
                     </label>
                     <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Icon icon={Mail} size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                       <Input
                         id="email"
                         type="email"
@@ -218,7 +219,7 @@ export default function Signup() {
                       Mot de passe
                     </label>
                     <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Icon icon={Lock} size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                       <Input
                         id="password"
                         type={showPassword ? 'text' : 'password'}
@@ -234,7 +235,7 @@ export default function Signup() {
                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                          aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
                        >
-                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                         <Icon icon={showPassword ? EyeOff : Eye} size={16} />
                        </button>
                     </div>
 
@@ -242,7 +243,7 @@ export default function Signup() {
                     {formData.password && (
                       <div className="space-y-2 animate-fade-in">
                         <div className="flex items-center justify-between text-xs">
-                          <span className="text-gray-600">Force du mot de passe</span>
+                          <span className="text-gray-400">Force du mot de passe</span>
                           <span className={`font-medium ${
                             passwordStrength(formData.password) <= 2 ? 'text-red-600' :
                             passwordStrength(formData.password) <= 3 ? 'text-yellow-600' : 'text-green-600'
@@ -265,7 +266,7 @@ export default function Signup() {
                       Confirmer le mot de passe
                     </label>
                     <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Icon icon={Lock} size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                       <Input
                         id="confirmPassword"
                         type={showConfirmPassword ? 'text' : 'password'}
@@ -281,7 +282,7 @@ export default function Signup() {
                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                          aria-label={showConfirmPassword ? "Masquer la confirmation du mot de passe" : "Afficher la confirmation du mot de passe"}
                        >
-                         {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                         <Icon icon={showConfirmPassword ? EyeOff : Eye} size={16} />
                        </button>
                     </div>
                   </div>
@@ -295,7 +296,7 @@ export default function Signup() {
                       className="mt-1 w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary"
                       required
                     />
-                    <label htmlFor="acceptTerms" className="text-sm text-gray-600">
+                    <label htmlFor="acceptTerms" className="text-sm text-gray-400">
                       J&apos;accepte les{' '}
                       <Link href="/terms" className="text-primary hover:text-primary/80 underline">
                         conditions d&apos;utilisation
@@ -331,7 +332,7 @@ export default function Signup() {
 
             {step === 1 && (
               <div className="mt-6 text-center">
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-400">
                   Déjà un compte ?{' '}
                   <Link
                     href="/login"

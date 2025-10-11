@@ -11,6 +11,7 @@ import {
   CreditCard,
   ArrowDownLeft
 } from 'lucide-react';
+import { Icon } from '../../../lib/icon';
 
 const menuItems = [
   { name: 'Accueil', href: '/dashboard', icon: Home, description: 'Tableau de bord' },
@@ -31,16 +32,16 @@ export default function Sidebar() {
       <div className="fixed inset-0 z-40 hidden bg-gray-600 bg-opacity-75 lg:hidden" />
 
       {/* Sidebar content */}
-      <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white border-r border-gray-200 px-6 pb-4 shadow-lg">
+      <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 border-r border-gray-700 px-6 pb-4 shadow-lg">
         {/* Logo */}
-        <div className="flex h-16 shrink-0 items-center border-b border-gray-200">
+        <div className="flex h-16 shrink-0 items-center border-b border-gray-700">
           <div className="flex items-center space-x-3">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
               <span className="text-sm font-bold text-white">VB</span>
             </div>
             <div>
-              <h1 className="text-lg font-semibold text-gray-900">VaelixBank</h1>
-              <p className="text-xs text-gray-500">Banque digitale</p>
+              <h1 className="text-lg font-semibold text-gray-100">VaelixBank</h1>
+              <p className="text-xs text-gray-400">Banque digitale</p>
             </div>
           </div>
         </div>
@@ -59,20 +60,22 @@ export default function Sidebar() {
                         className={`group flex gap-x-3 rounded-lg p-3 text-sm font-medium leading-6 transition-all duration-200 ${
                           isActive
                             ? 'bg-primary text-white shadow-sm'
-                            : 'text-gray-700 hover:bg-gray-50 hover:text-primary'
+                            : 'text-gray-300 hover:bg-gray-800 hover:text-primary'
                         }`}
                       >
-                        <item.icon
-                          className={`h-5 w-5 shrink-0 ${
-                            isActive ? 'text-white' : 'text-gray-400 group-hover:text-primary'
+                        <Icon
+                          icon={item.icon}
+                          size={20}
+                          className={`shrink-0 ${
+                            isActive ? 'text-white' : 'text-gray-500 group-hover:text-primary'
                           }`}
                           aria-hidden="true"
                         />
                         <div className="flex flex-col">
                           <span>{item.name}</span>
-                          <span className={`text-xs ${
-                            isActive ? 'text-primary-foreground/80' : 'text-gray-500'
-                          }`}>
+                           <span className={`text-xs ${
+                             isActive ? 'text-primary-foreground/80' : 'text-gray-400'
+                           }`}>
                             {item.description}
                           </span>
                         </div>
@@ -85,21 +88,21 @@ export default function Sidebar() {
 
             {/* Quick Actions */}
             <li className="mt-auto">
-              <div className="rounded-lg bg-gray-50 p-4">
-                <h3 className="text-sm font-medium text-gray-900 mb-2">Actions rapides</h3>
+              <div className="rounded-lg bg-gray-800 p-4">
+                <h3 className="text-sm font-medium text-gray-100 mb-2">Actions rapides</h3>
                 <div className="space-y-2">
                   <Link
                     href="/send"
                     className="flex items-center gap-x-2 text-sm text-primary hover:text-primary/80 transition-colors"
                   >
-                    <Send className="h-4 w-4" />
+                    <Icon icon={Send} size={16} />
                     Nouveau virement
                   </Link>
                   <Link
                     href="/cards"
                     className="flex items-center gap-x-2 text-sm text-primary hover:text-primary/80 transition-colors"
                   >
-                    <CreditCard className="h-4 w-4" />
+                    <Icon icon={CreditCard} size={16} />
                     Ajouter une carte
                   </Link>
                 </div>

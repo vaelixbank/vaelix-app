@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Search, Bell, Menu, X } from 'lucide-react';
 import { Button } from './button';
+import { Icon } from '../../../lib/icon';
 
 export default function MobileHeader() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -19,14 +20,14 @@ export default function MobileHeader() {
 
   return (
     <>
-      <header className="lg:hidden sticky top-0 z-40 bg-white/80 backdrop-blur-lg border-b border-gray-200 shadow-sm">
+      <header className="lg:hidden sticky top-0 z-40 bg-gray-900/80 backdrop-blur-lg border-b border-gray-700 shadow-sm">
         <div className="flex items-center justify-between px-4 py-3">
           {/* Logo/Brand */}
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">VB</span>
             </div>
-            <span className="font-semibold text-gray-900">VaelixBank</span>
+            <span className="font-semibold text-gray-100">VaelixBank</span>
           </div>
 
           {/* Actions */}
@@ -38,12 +39,12 @@ export default function MobileHeader() {
               onClick={() => setIsSearchOpen(!isSearchOpen)}
               className="h-9 w-9"
             >
-              <Search className="h-4 w-4" />
+              <Icon icon={Search} size={16} />
             </Button>
 
             {/* Notifications */}
             <Button variant="ghost" size="icon" className="h-9 w-9 relative">
-              <Bell className="h-4 w-4" />
+              <Icon icon={Bell} size={16} />
               <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">
                 2
               </span>
@@ -56,7 +57,7 @@ export default function MobileHeader() {
               onClick={() => setShowMenu(!showMenu)}
               className="h-9 w-9"
             >
-              {showMenu ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+              <Icon icon={showMenu ? X : Menu} size={16} />
             </Button>
           </div>
         </div>
@@ -65,13 +66,13 @@ export default function MobileHeader() {
         {isSearchOpen && (
           <div className="px-4 pb-3 animate-slide-in-right">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Icon icon={Search} size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
                 placeholder="Rechercher des transactions, comptes..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-gray-100"
               />
             </div>
           </div>
@@ -88,17 +89,17 @@ export default function MobileHeader() {
           />
 
           {/* Menu Panel */}
-          <div className="fixed right-0 top-0 h-full w-80 bg-white shadow-xl transform transition-transform duration-300 ease-in-out">
+          <div className="fixed right-0 top-0 h-full w-80 bg-gray-900 shadow-xl transform transition-transform duration-300 ease-in-out">
             <div className="flex flex-col h-full">
               {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">Menu</h2>
+              <div className="flex items-center justify-between p-6 border-b border-gray-700">
+                <h2 className="text-lg font-semibold text-gray-100">Menu</h2>
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={() => setShowMenu(false)}
                 >
-                  <X className="h-5 w-5" />
+                  <Icon icon={X} size={20} />
                 </Button>
               </div>
 
@@ -109,7 +110,7 @@ export default function MobileHeader() {
                     <li key={item.name}>
                       <Link
                         href={item.href}
-                        className="flex items-center space-x-3 px-3 py-3 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors duration-200"
+                        className="flex items-center space-x-3 px-3 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition-colors duration-200"
                         onClick={() => setShowMenu(false)}
                       >
                         <span className="text-lg">{item.icon}</span>
@@ -120,12 +121,12 @@ export default function MobileHeader() {
                 </ul>
 
                 {/* Quick Actions */}
-                <div className="mt-8 pt-6 border-t border-gray-200">
-                  <h3 className="text-sm font-medium text-gray-900 mb-3">Actions rapides</h3>
+                <div className="mt-8 pt-6 border-t border-gray-700">
+                  <h3 className="text-sm font-medium text-gray-100 mb-3">Actions rapides</h3>
                   <div className="space-y-2">
                     <Link
                       href="/send"
-                      className="flex items-center space-x-3 px-3 py-2 text-primary hover:bg-primary/5 rounded-lg transition-colors duration-200"
+                      className="flex items-center space-x-3 px-3 py-2 text-primary hover:bg-primary/10 rounded-lg transition-colors duration-200"
                       onClick={() => setShowMenu(false)}
                     >
                       <span className="text-lg">💸</span>
@@ -133,7 +134,7 @@ export default function MobileHeader() {
                     </Link>
                     <Link
                       href="/cards"
-                      className="flex items-center space-x-3 px-3 py-2 text-primary hover:bg-primary/5 rounded-lg transition-colors duration-200"
+                      className="flex items-center space-x-3 px-3 py-2 text-primary hover:bg-primary/10 rounded-lg transition-colors duration-200"
                       onClick={() => setShowMenu(false)}
                     >
                       <span className="text-lg">💳</span>

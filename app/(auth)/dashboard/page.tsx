@@ -6,6 +6,7 @@ import { useStore } from '../../lib/store';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { Badge } from '../../components/ui/badge';
+import { Icon } from '../../../lib/icon';
 import {
   ArrowUpRight,
   ArrowDownLeft,
@@ -33,7 +34,7 @@ export default function Dashboard() {
   }, [setUser]);
 
   if (!user) return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
       <div className="animate-pulse">
         <div className="w-12 h-12 bg-primary rounded-full"></div>
       </div>
@@ -111,22 +112,22 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Header */}
         <div className="mb-8 animate-fade-in-up">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-3xl font-bold text-gray-100">
                 Bonjour, {user.name || 'Utilisateur'} 👋
               </h1>
-              <p className="text-gray-600 mt-1">
+              <p className="text-gray-400 mt-1">
                 Voici un aperçu de vos finances
               </p>
             </div>
             <div className="hidden sm:block">
               <Button variant="outline" size="sm">
-                <Eye className="w-4 h-4 mr-2" />
+                <Icon icon={Eye} size={16} className="mr-2" />
                  Vue d&apos;ensemble
               </Button>
             </div>
@@ -134,7 +135,7 @@ export default function Dashboard() {
         </div>
 
         {/* Balance Card */}
-        <Card className="mb-8 bg-gradient-to-r from-primary to-primary/80 text-white border-0 shadow-xl animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+        <Card className="mb-8 bg-gradient-to-r from-primary to-primary/60 text-white border-0 shadow-xl animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
           <CardContent className="p-8">
             <div className="flex items-center justify-between">
               <div className="flex-1">
@@ -146,14 +147,14 @@ export default function Dashboard() {
                 </p>
                 <div className="flex items-center mt-2">
                   <Badge variant="secondary" className="bg-white/20 text-white border-0">
-                    <TrendingUp className="w-3 h-3 mr-1" />
+                    <Icon icon={TrendingUp} size={12} className="mr-1" />
                     +2.5% ce mois
                   </Badge>
                 </div>
               </div>
               <div className="hidden md:block">
                 <div className="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center">
-                  <DollarSign className="w-10 h-10 text-white" />
+                  <Icon icon={DollarSign} size={40} className="text-white" />
                 </div>
               </div>
             </div>
@@ -162,7 +163,7 @@ export default function Dashboard() {
 
         {/* Quick Actions */}
         <div className="mb-8 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Actions rapides</h2>
+          <h2 className="text-xl font-semibold text-gray-100 mb-4">Actions rapides</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {quickActions.map((action, index) => {
               const IconComponent = action.icon;
@@ -171,7 +172,7 @@ export default function Dashboard() {
                    <Card className="hover-lift cursor-pointer group animate-scale-in hover-scale" style={{ animationDelay: `${0.3 + index * 0.1}s` }}>
                     <CardContent className="p-6 text-center">
                       <div className={`w-12 h-12 ${action.bgColor} rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-200`}>
-                        <IconComponent className={`w-6 h-6 ${action.color}`} />
+                        <Icon icon={IconComponent} size={24} className={action.color} />
                       </div>
                       <h3 className="font-semibold text-gray-900 mb-1">{action.title}</h3>
                       <p className="text-sm text-gray-600">{action.description}</p>
@@ -189,7 +190,7 @@ export default function Dashboard() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="flex items-center">
-                  <Receipt className="w-5 h-5 mr-2" />
+                  <Icon icon={Receipt} size={20} className="mr-2" />
                   Transactions récentes
                 </CardTitle>
                  <Button variant="ghost" size="sm" onClick={() => window.location.href = '/transactions'}>
@@ -199,7 +200,7 @@ export default function Dashboard() {
               <CardContent>
                 <div className="space-y-4">
                   {transactions.slice(0, 5).map((transaction, index) => (
-                     <div key={transaction.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg animate-fade-in hover-lift cursor-pointer" style={{ animationDelay: `${0.5 + index * 0.1}s` }}>
+                      <div key={transaction.id} className="flex items-center justify-between p-4 bg-gray-800 rounded-lg animate-fade-in hover-lift cursor-pointer" style={{ animationDelay: `${0.5 + index * 0.1}s` }}>
                       <div className="flex items-center space-x-3">
                         <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                           transaction.amount > 0 ? 'bg-green-100' : 'bg-red-100'
@@ -211,8 +212,8 @@ export default function Dashboard() {
                           </span>
                         </div>
                         <div>
-                          <p className="font-medium text-gray-900">{transaction.description}</p>
-                          <p className="text-sm text-gray-500">{transaction.date}</p>
+                          <p className="font-medium text-gray-100">{transaction.description}</p>
+                          <p className="text-sm text-gray-400">{transaction.date}</p>
                         </div>
                       </div>
                       <div className="text-right">
@@ -233,7 +234,7 @@ export default function Dashboard() {
           <div className="animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
             <Card>
               <CardHeader>
-                <CardTitle>Aperçu du mois</CardTitle>
+                 <CardTitle className="text-gray-100">Aperçu du mois</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -243,10 +244,10 @@ export default function Dashboard() {
                       <div key={stat.title} className="flex items-center justify-between animate-fade-in" style={{ animationDelay: `${0.7 + index * 0.1}s` }}>
                         <div className="flex items-center space-x-3">
                           <div className={`w-10 h-10 ${stat.bgColor} rounded-lg flex items-center justify-center`}>
-                            <IconComponent className={`w-5 h-5 ${stat.color}`} />
+                            <Icon icon={IconComponent} size={20} className={stat.color} />
                           </div>
                           <div>
-                            <p className="font-medium text-gray-900">{stat.title}</p>
+                             <p className="font-medium text-gray-100">{stat.title}</p>
                             <p className={`text-sm ${stat.change > 0 ? 'text-green-600' : 'text-red-600'}`}>
                               {stat.change > 0 ? '+' : ''}{stat.change}%
                             </p>

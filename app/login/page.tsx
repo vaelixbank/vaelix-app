@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
+import { Icon } from '../../lib/icon';
 import { Eye, EyeOff, Lock, Mail, Shield } from 'lucide-react';
 
 export default function Login() {
@@ -48,22 +49,22 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-white to-secondary/5 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-primary/10 via-gray-900 to-secondary/10 flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-8">
         {/* Logo */}
         <div className="text-center animate-fade-in-up">
           <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-            <Shield className="w-8 h-8 text-white" />
+            <Icon icon={Shield} size={32} className="text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">VaelixBank</h1>
-          <p className="text-gray-600 mt-2">Votre banque digitale de confiance</p>
+          <h1 className="text-3xl font-bold text-gray-100">VaelixBank</h1>
+          <p className="text-gray-400 mt-2">Votre banque digitale de confiance</p>
         </div>
 
         {/* Login Card */}
         <Card className="shadow-xl border-0 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl text-center">Connexion</CardTitle>
-            <CardDescription className="text-center">
+            <CardTitle className="text-2xl text-center text-gray-100">Connexion</CardTitle>
+            <CardDescription className="text-center text-gray-400">
               Accédez à votre compte bancaire sécurisé
             </CardDescription>
           </CardHeader>
@@ -76,11 +77,11 @@ export default function Login() {
               )}
 
               <div className="space-y-2">
-                <label htmlFor="email" className="text-sm font-medium text-gray-700">
+                <label htmlFor="email" className="text-sm font-medium text-gray-300">
                   Adresse email
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Icon icon={Mail} size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                   <Input
                     id="email"
                     type="email"
@@ -95,11 +96,11 @@ export default function Login() {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="password" className="text-sm font-medium text-gray-700">
+                <label htmlFor="password" className="text-sm font-medium text-gray-300">
                   Mot de passe
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Icon icon={Lock} size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                   <Input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
@@ -110,14 +111,14 @@ export default function Login() {
                     required
                     aria-describedby={error ? "login-error" : undefined}
                   />
-                   <button
-                     type="button"
-                     onClick={() => setShowPassword(!showPassword)}
-                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                     aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
-                   >
-                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                   </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                    >
+                      <Icon icon={showPassword ? EyeOff : Eye} size={16} />
+                    </button>
                 </div>
               </div>
 
@@ -127,12 +128,12 @@ export default function Login() {
                     type="checkbox"
                     className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary"
                   />
-                  <span className="text-sm text-gray-600">Se souvenir de moi</span>
+                  <span className="text-sm text-gray-400">Se souvenir de moi</span>
                 </label>
-                <Link
-                  href="/forgot-password"
-                  className="text-sm text-primary hover:text-primary/80 transition-colors"
-                >
+                  <Link
+                    href="/forgot-password"
+                    className="text-sm text-primary hover:text-primary/70 transition-colors"
+                  >
                   Mot de passe oublié ?
                 </Link>
               </div>
@@ -152,7 +153,7 @@ export default function Login() {
                 Pas encore de compte ?{' '}
                 <Link
                   href="/signup"
-                  className="font-medium text-primary hover:text-primary/80 transition-colors"
+                  className="font-medium text-primary hover:text-primary/70 transition-colors"
                 >
                   Créer un compte
                 </Link>
@@ -160,9 +161,9 @@ export default function Login() {
             </div>
 
             {/* Demo Credentials */}
-            <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-              <p className="text-xs font-medium text-gray-700 mb-2">Identifiants de démonstration :</p>
-              <div className="text-xs text-gray-600 space-y-1">
+            <div className="mt-6 p-4 bg-gray-800 rounded-lg border border-gray-600">
+              <p className="text-xs font-medium text-gray-300 mb-2">Identifiants de démonstration :</p>
+              <div className="text-xs text-gray-400 space-y-1">
                 <p><strong>Email :</strong> admin</p>
                 <p><strong>Mot de passe :</strong> admin</p>
               </div>
@@ -171,7 +172,7 @@ export default function Login() {
         </Card>
 
         {/* Footer */}
-        <div className="text-center text-xs text-gray-500 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+        <div className="text-center text-xs text-gray-400 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
           <p>Protégé par un cryptage bancaire de niveau bancaire</p>
           <p className="mt-1">© 2024 VaelixBank. Tous droits réservés.</p>
         </div>

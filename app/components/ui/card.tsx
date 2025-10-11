@@ -6,7 +6,7 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ className, variant = 'default', ...props }, ref) => {
-    const baseClasses = 'rounded-xl bg-white border border-gray-200 transition-shadow duration-200';
+    const baseClasses = 'rounded-xl bg-gray-900 border border-gray-700 transition-shadow duration-200';
 
     const variantClasses = {
       default: 'shadow-sm hover:shadow-md',
@@ -51,7 +51,7 @@ const CardDescription = forwardRef<HTMLParagraphElement, React.HTMLAttributes<HT
   ({ className, ...props }, ref) => (
     <p
       ref={ref}
-      className={`text-sm text-gray-600 ${className || ''}`}
+      className={`text-sm text-gray-400 ${className || ''}`}
       {...props}
     />
   )

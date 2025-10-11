@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, TrendingUp, Send, CreditCard, User } from 'lucide-react';
+import { Icon } from '../../../lib/icon';
 
 const menuItems = [
   { name: 'Accueil', href: '/dashboard', icon: Home, label: 'Accueil' },
@@ -18,7 +19,7 @@ export default function BottomNav() {
   return (
     <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50">
       {/* Background with blur effect */}
-      <div className="bg-white/80 backdrop-blur-lg border-t border-gray-200 shadow-lg">
+      <div className="bg-gray-900/80 backdrop-blur-lg border-t border-gray-700 shadow-lg">
         <div className="flex items-center justify-around px-2 py-1">
           {menuItems.map((item) => {
             const isActive = pathname === item.href;
@@ -30,8 +31,8 @@ export default function BottomNav() {
                 href={item.href}
                 className={`relative flex flex-col items-center justify-center p-3 rounded-xl transition-all duration-200 min-w-0 flex-1 ${
                   isActive
-                    ? 'text-primary bg-primary/10'
-                    : 'text-gray-600 hover:text-primary hover:bg-gray-50'
+                    ? 'text-primary bg-primary/20'
+                    : 'text-gray-400 hover:text-primary hover:bg-gray-800'
                 }`}
               >
                 {/* Active indicator */}
@@ -40,15 +41,17 @@ export default function BottomNav() {
                 )}
 
                 {/* Icon */}
-                <IconComponent
-                  className={`w-5 h-5 mb-1 transition-transform duration-200 ${
+                <Icon
+                  icon={IconComponent}
+                  size={20}
+                  className={`mb-1 transition-transform duration-200 ${
                     isActive ? 'scale-110' : ''
                   }`}
                 />
 
                 {/* Label */}
                 <span className={`text-xs font-medium truncate ${
-                  isActive ? 'text-primary' : 'text-gray-600'
+                  isActive ? 'text-primary' : 'text-gray-400'
                 }`}>
                   {item.label}
                 </span>
