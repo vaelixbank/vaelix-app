@@ -2,8 +2,23 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
-import { useStore } from '../../../lib/store';
-import { ArrowUpRight, ArrowDownLeft, TrendingUp, Bitcoin } from 'lucide-react';
+import { useStore } from '../../lib/store';
+import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { Badge } from '../../components/ui/badge';
+import {
+  ArrowUpRight,
+  ArrowDownLeft,
+  TrendingUp,
+  Bitcoin,
+  CreditCard,
+  Receipt,
+  Eye,
+  TrendingDown,
+  TrendingUp as TrendingUpIcon,
+  DollarSign,
+  PiggyBank
+} from 'lucide-react';
 
 export default function Dashboard() {
   const { user, transactions, setUser } = useStore();
@@ -18,122 +33,236 @@ export default function Dashboard() {
   }, [setUser]);
 
   if (!user) return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+      <div className="animate-pulse">
+        <div className="w-12 h-12 bg-primary rounded-full"></div>
+      </div>
     </div>
   );
 
+  const quickActions = [
+    {
+      title: 'Envoyer',
+      description: 'Virement instantané',
+      href: '/send',
+      icon: ArrowUpRight,
+      color: 'bg-blue-500',
+      bgColor: 'bg-blue-50'
+    },
+    {
+      title: 'Demander',
+      description: 'Paiement demandé',
+      href: '/request',
+      icon: ArrowDownLeft,
+      color: 'bg-green-500',
+      bgColor: 'bg-green-50'
+    },
+    {
+      title: 'Investir',
+      description: 'Gérer portefeuille',
+      href: '/invest',
+      icon: TrendingUp,
+      color: 'bg-purple-500',
+      bgColor: 'bg-purple-50'
+    },
+    {
+      title: 'Crypto',
+      description: 'Trading crypto',
+      href: '/cryptos',
+      icon: Bitcoin,
+      color: 'bg-orange-500',
+      bgColor: 'bg-orange-50'
+    },
+    {
+      title: 'Cartes',
+      description: 'Gérer paiements',
+      href: '/cards',
+      icon: CreditCard,
+      color: 'bg-indigo-500',
+      bgColor: 'bg-indigo-50'
+    },
+  ];
+
+  const monthlyStats = [
+    {
+      title: 'Dépenses',
+      amount: -1250,
+      change: -8.2,
+      icon: TrendingDown,
+      color: 'text-red-600',
+      bgColor: 'bg-red-50'
+    },
+    {
+      title: 'Revenus',
+      amount: 3200,
+      change: 12.5,
+      icon: TrendingUpIcon,
+      color: 'text-green-600',
+      bgColor: 'bg-green-50'
+    },
+    {
+      title: 'Économies',
+      amount: 1950,
+      change: 15.3,
+      icon: PiggyBank,
+      color: 'text-blue-600',
+      bgColor: 'bg-blue-50'
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      {/* Quick Actions */}
-      <div className="px-6 py-6 animate-fade-in">
-        <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
-          <Link href="/send" className="flex flex-col items-center p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-2">
-              <ArrowUpRight className="w-6 h-6 text-blue-600" />
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Welcome Header */}
+        <div className="mb-8 animate-fade-in-up">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">
+                Bonjour, {user.name || 'Utilisateur'} 👋
+              </h1>
+              <p className="text-gray-600 mt-1">
+                Voici un aperçu de vos finances
+              </p>
             </div>
-            <span className="text-xs font-medium text-gray-700">Envoyer</span>
-          </Link>
-          <Link href="/request" className="flex flex-col items-center p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200">
-            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-2">
-              <ArrowDownLeft className="w-6 h-6 text-green-600" />
-            </div>
-            <span className="text-xs font-medium text-gray-700">Demander</span>
-          </Link>
-          <Link href="/invest" className="flex flex-col items-center p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200">
-            <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-2">
-              <TrendingUp className="w-6 h-6 text-purple-600" />
-            </div>
-            <span className="text-xs font-medium text-gray-700">Investir</span>
-          </Link>
-          <Link href="/cryptos" className="flex flex-col items-center p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200">
-            <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mb-2">
-              <Bitcoin className="w-6 h-6 text-orange-600" />
-            </div>
-            <span className="text-xs font-medium text-gray-700">Crypto</span>
-          </Link>
-          <div className="hidden md:flex flex-col items-center p-4 bg-white rounded-xl shadow-sm">
-            <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-2">
-              <span className="text-red-600 font-bold">!</span>
-            </div>
-            <span className="text-xs font-medium text-gray-700">Alertes</span>
-          </div>
-          <div className="hidden lg:flex flex-col items-center p-4 bg-white rounded-xl shadow-sm">
-            <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-2">
-              <span className="text-yellow-600 font-bold">?</span>
-            </div>
-            <span className="text-xs font-medium text-gray-700">Support</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Balance Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 md:p-8 rounded-3xl shadow-lg animate-fade-in mx-6 mb-6" style={{ animationDelay: '0.1s' }}>
-        <div className="text-center md:text-left md:flex md:items-center md:justify-between">
-          <div>
-            <p className="text-blue-100 text-sm uppercase tracking-wide">Solde total</p>
-            <p className="text-4xl md:text-5xl font-bold mt-2">${user.balance.toFixed(2)}</p>
-            <p className="text-blue-200 text-sm mt-1">Disponible</p>
-          </div>
-          <div className="hidden md:block">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-              <p className="text-sm text-blue-100">Cette semaine</p>
-              <p className="text-2xl font-semibold text-white">+2.5%</p>
+            <div className="hidden sm:block">
+              <Button variant="outline" size="sm">
+                <Eye className="w-4 h-4 mr-2" />
+                 Vue d&apos;ensemble
+              </Button>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Transactions Section */}
-      <div className="px-6 py-4 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-        {/* Recent Transactions */}
-        <div>
-          <div className="flex justify-between items-center mb-3">
-            <h3 className="text-lg font-semibold text-gray-900">Transactions Récentes</h3>
-            <Link href="/transactions" className="text-blue-600 text-sm font-medium hover:text-blue-700 transition-colors duration-200">
-              Voir tout
-            </Link>
-          </div>
-          <div className="space-y-3">
-            {transactions.slice(0, 5).map((transaction) => (
-              <div key={transaction.id} className="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center justify-between">
-                <div className="flex items-center">
-                  <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mr-3">
-                    <span className="text-sm font-medium text-gray-700">
-                      {transaction.description.charAt(0)}
-                    </span>
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-900">{transaction.description}</p>
-                    <p className="text-sm text-gray-500">{transaction.date}</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p className={`font-semibold ${transaction.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {transaction.amount > 0 ? '+' : ''}${transaction.amount}
-                  </p>
+        {/* Balance Card */}
+        <Card className="mb-8 bg-gradient-to-r from-primary to-primary/80 text-white border-0 shadow-xl animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+          <CardContent className="p-8">
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <p className="text-primary-foreground/80 text-sm font-medium uppercase tracking-wide">
+                  Solde disponible
+                </p>
+                <p className="text-4xl font-bold mt-2">
+                  ${user.balance.toLocaleString('fr-FR', { minimumFractionDigits: 2 })}
+                </p>
+                <div className="flex items-center mt-2">
+                  <Badge variant="secondary" className="bg-white/20 text-white border-0">
+                    <TrendingUp className="w-3 h-3 mr-1" />
+                    +2.5% ce mois
+                  </Badge>
                 </div>
               </div>
-            ))}
+              <div className="hidden md:block">
+                <div className="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center">
+                  <DollarSign className="w-10 h-10 text-white" />
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Quick Actions */}
+        <div className="mb-8 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Actions rapides</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {quickActions.map((action, index) => {
+              const IconComponent = action.icon;
+              return (
+                 <Link key={action.title} href={action.href}>
+                   <Card className="hover-lift cursor-pointer group animate-scale-in hover-scale" style={{ animationDelay: `${0.3 + index * 0.1}s` }}>
+                    <CardContent className="p-6 text-center">
+                      <div className={`w-12 h-12 ${action.bgColor} rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-200`}>
+                        <IconComponent className={`w-6 h-6 ${action.color}`} />
+                      </div>
+                      <h3 className="font-semibold text-gray-900 mb-1">{action.title}</h3>
+                      <p className="text-sm text-gray-600">{action.description}</p>
+                    </CardContent>
+                  </Card>
+                </Link>
+              );
+            })}
           </div>
         </div>
-      </div>
 
-      {/* Analytics Section for Desktop */}
-      <div className="hidden md:block px-6 py-4 animate-fade-in" style={{ animationDelay: '0.3s' }}>
-        <h3 className="text-lg font-semibold text-gray-900 mb-3">Aperçu Financier</h3>
-        <div className="grid grid-cols-3 gap-4">
-          <div className="bg-white p-4 rounded-xl shadow-sm">
-            <p className="text-sm text-gray-500">Dépenses ce mois</p>
-            <p className="text-2xl font-bold text-red-600">-$1,250</p>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Recent Transactions */}
+          <div className="lg:col-span-2 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle className="flex items-center">
+                  <Receipt className="w-5 h-5 mr-2" />
+                  Transactions récentes
+                </CardTitle>
+                 <Button variant="ghost" size="sm" onClick={() => window.location.href = '/transactions'}>
+                   Voir tout
+                 </Button>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {transactions.slice(0, 5).map((transaction, index) => (
+                     <div key={transaction.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg animate-fade-in hover-lift cursor-pointer" style={{ animationDelay: `${0.5 + index * 0.1}s` }}>
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                          transaction.amount > 0 ? 'bg-green-100' : 'bg-red-100'
+                        }`}>
+                          <span className={`text-sm font-medium ${
+                            transaction.amount > 0 ? 'text-green-600' : 'text-red-600'
+                          }`}>
+                            {transaction.description.charAt(0).toUpperCase()}
+                          </span>
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-900">{transaction.description}</p>
+                          <p className="text-sm text-gray-500">{transaction.date}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className={`font-semibold ${
+                          transaction.amount > 0 ? 'text-green-600' : 'text-red-600'
+                        }`}>
+                          {transaction.amount > 0 ? '+' : ''}${Math.abs(transaction.amount)}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
           </div>
-          <div className="bg-white p-4 rounded-xl shadow-sm">
-            <p className="text-sm text-gray-500">Revenus ce mois</p>
-            <p className="text-2xl font-bold text-green-600">+$3,200</p>
-          </div>
-          <div className="bg-white p-4 rounded-xl shadow-sm">
-            <p className="text-sm text-gray-500">Économies</p>
-            <p className="text-2xl font-bold text-blue-600">$1,950</p>
+
+          {/* Monthly Overview */}
+          <div className="animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+            <Card>
+              <CardHeader>
+                <CardTitle>Aperçu du mois</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {monthlyStats.map((stat, index) => {
+                    const IconComponent = stat.icon;
+                    return (
+                      <div key={stat.title} className="flex items-center justify-between animate-fade-in" style={{ animationDelay: `${0.7 + index * 0.1}s` }}>
+                        <div className="flex items-center space-x-3">
+                          <div className={`w-10 h-10 ${stat.bgColor} rounded-lg flex items-center justify-center`}>
+                            <IconComponent className={`w-5 h-5 ${stat.color}`} />
+                          </div>
+                          <div>
+                            <p className="font-medium text-gray-900">{stat.title}</p>
+                            <p className={`text-sm ${stat.change > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                              {stat.change > 0 ? '+' : ''}{stat.change}%
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className={`font-bold ${stat.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                            {stat.amount > 0 ? '+' : ''}${Math.abs(stat.amount)}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
