@@ -20,14 +20,14 @@ export default function MobileHeader() {
 
   return (
     <>
-      <header className="lg:hidden sticky top-0 z-40 bg-gray-900/80 backdrop-blur-lg border-b border-gray-700 shadow-sm">
-        <div className="flex items-center justify-between px-4 py-3">
+      <header className="lg:hidden sticky top-0 z-40 bg-background/80 backdrop-blur-lg border-b border-border shadow-sm">
+        <div className="flex items-center justify-between px-6 py-4">
           {/* Logo/Brand */}
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">VB</span>
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-primary rounded-xl flex items-center justify-center">
+              <span className="text-primary-foreground font-bold text-sm">VB</span>
             </div>
-            <span className="font-semibold text-gray-100">VaelixBank</span>
+            <span className="font-semibold text-foreground">VaelixBank</span>
           </div>
 
           {/* Actions */}
@@ -64,15 +64,15 @@ export default function MobileHeader() {
 
         {/* Search Bar */}
         {isSearchOpen && (
-          <div className="px-4 pb-3 animate-slide-in-right">
+          <div className="px-6 pb-4 animate-slide-in-right">
             <div className="relative">
-              <Icon icon={Search} size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Icon icon={Search} size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
               <input
                 type="text"
                 placeholder="Rechercher des transactions, comptes..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-gray-100"
+                className="w-full pl-10 pr-4 py-3 bg-muted border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-foreground placeholder:text-muted-foreground"
               />
             </div>
           </div>
@@ -89,11 +89,11 @@ export default function MobileHeader() {
           />
 
           {/* Menu Panel */}
-          <div className="fixed right-0 top-0 h-full w-80 bg-gray-900 shadow-xl transform transition-transform duration-300 ease-in-out">
+          <div className="fixed right-0 top-0 h-full w-80 bg-card shadow-xl transform transition-transform duration-300 ease-in-out border-l border-border">
             <div className="flex flex-col h-full">
               {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-gray-700">
-                <h2 className="text-lg font-semibold text-gray-100">Menu</h2>
+              <div className="flex items-center justify-between p-6 border-b border-border">
+                <h2 className="text-lg font-semibold text-card-foreground">Menu</h2>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -110,7 +110,7 @@ export default function MobileHeader() {
                     <li key={item.name}>
                       <Link
                         href={item.href}
-                        className="flex items-center space-x-3 px-3 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition-colors duration-200"
+                        className="flex items-center space-x-3 px-3 py-3 text-muted-foreground hover:bg-muted rounded-lg transition-colors duration-200"
                         onClick={() => setShowMenu(false)}
                       >
                         <span className="text-lg">{item.icon}</span>
@@ -121,8 +121,8 @@ export default function MobileHeader() {
                 </ul>
 
                 {/* Quick Actions */}
-                <div className="mt-8 pt-6 border-t border-gray-700">
-                  <h3 className="text-sm font-medium text-gray-100 mb-3">Actions rapides</h3>
+                <div className="mt-8 pt-6 border-t border-border">
+                  <h3 className="text-sm font-medium text-card-foreground mb-3">Actions rapides</h3>
                   <div className="space-y-2">
                     <Link
                       href="/send"

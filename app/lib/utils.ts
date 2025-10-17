@@ -38,5 +38,5 @@ export function isMobile(): boolean {
 
 // Capacitor detection
 export function isCapacitorApp(): boolean {
-  return typeof window !== 'undefined' && !!(window as any).Capacitor
+  return typeof window !== 'undefined' && !!(window as { Capacitor?: unknown }).Capacitor
 }

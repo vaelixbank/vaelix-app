@@ -17,186 +17,163 @@ export default function Account() {
   };
 
   if (!user) return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-white shadow-sm sticky top-0 z-10">
-        <div className="px-6 py-4">
-          <div className="flex items-center justify-between">
-            <Link href="/dashboard" className="p-2 -m-2 text-gray-600 hover:text-gray-900 transition-colors duration-200">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-            </Link>
-            <h1 className="text-xl font-bold text-gray-900">Mon compte</h1>
-            <div className="w-6"></div>
+      <div className="mb-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-semibold text-foreground">Account</h1>
+            <p className="text-muted-foreground text-sm mt-1">Manage your profile and settings</p>
           </div>
+          <Button variant="ghost" size="sm" onClick={handleLogout}>
+            Logout
+          </Button>
         </div>
       </div>
 
-      <div className="p-6">
+      <div className="space-y-4">
         {/* Profile Card */}
-        <Card className="mb-6">
-          <CardContent className="p-6">
+        <Card className="border border-border">
+          <CardContent className="p-4">
             <div className="flex items-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mr-4">
-                <span className="text-2xl text-white font-bold">
+              <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center mr-3">
+                <span className="text-lg text-primary-foreground font-bold">
                   {user.name ? user.name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}
                 </span>
               </div>
               <div>
-                <h2 className="text-xl font-bold text-gray-900">{user.name || 'Utilisateur'}</h2>
-                <p className="text-gray-600">{user.email}</p>
-                <p className="text-sm text-gray-500">Membre depuis 2024</p>
+                <h2 className="font-semibold text-card-foreground">{user.name || 'User'}</h2>
+                <p className="text-sm text-muted-foreground">{user.email}</p>
+                <p className="text-xs text-muted-foreground">Member since 2024</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Tabs */}
-        <Card className="mb-6">
-          <div className="flex border-b border-gray-200">
-            {[
-              { id: 'profile', label: 'Profil', icon: '👤' },
-              { id: 'security', label: 'Sécurité', icon: '🔒' },
-              { id: 'settings', label: 'Paramètres', icon: '⚙️' }
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 py-4 px-6 text-center font-medium transition-colors duration-200 ${
-                  activeTab === tab.id
-                    ? 'text-blue-600 border-b-2 border-blue-600'
-                    : 'text-gray-500 hover:text-gray-900'
-                }`}
-              >
-                <span className="text-lg mb-1 block">{tab.icon}</span>
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
-          <CardContent>
-            {activeTab === 'profile' && (
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">Nom complet</label>
+        {/* Settings Sections */}
+        <div className="space-y-3">
+          {/* Profile Section */}
+          <Card className="border border-border">
+            <CardContent className="p-4">
+              <h3 className="font-medium text-card-foreground mb-3">Profile</h3>
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-xs font-medium text-muted-foreground mb-1">Full name</label>
                   <Input
                     type="text"
                     defaultValue={user.name || ''}
-                    placeholder="Votre nom"
+                    placeholder="Your name"
+                    className="text-sm"
                   />
                 </div>
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">Email</label>
+                <div>
+                  <label className="block text-xs font-medium text-muted-foreground mb-1">Email</label>
                   <Input
                     type="email"
                     defaultValue={user.email}
-                    placeholder="votre@email.com"
+                    placeholder="your@email.com"
+                    className="text-sm"
                   />
                 </div>
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">Téléphone</label>
+                <div>
+                  <label className="block text-xs font-medium text-muted-foreground mb-1">Phone</label>
                   <Input
                     type="tel"
                     placeholder="+33 6 XX XX XX XX"
+                    className="text-sm"
                   />
                 </div>
-                <Button className="w-full" size="lg">
-                  Sauvegarder les modifications
+                <Button className="w-full" size="sm">
+                  Save changes
                 </Button>
               </div>
-            )}
+            </CardContent>
+          </Card>
 
-            {activeTab === 'security' && (
-              <div className="space-y-4">
+          {/* Security Section */}
+          <Card className="border border-border">
+            <CardContent className="p-4">
+              <h3 className="font-medium text-card-foreground mb-3">Security</h3>
+              <div className="space-y-3">
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Changer le mot de passe</h3>
-                  <div className="space-y-3">
+                  <h4 className="text-sm font-medium text-card-foreground mb-2">Change password</h4>
+                  <div className="space-y-2">
                     <Input
                       type="password"
-                      placeholder="Mot de passe actuel"
+                      placeholder="Current password"
+                      className="text-sm"
                     />
                     <Input
                       type="password"
-                      placeholder="Nouveau mot de passe"
+                      placeholder="New password"
+                      className="text-sm"
                     />
                     <Input
                       type="password"
-                      placeholder="Confirmer le nouveau mot de passe"
+                      placeholder="Confirm new password"
+                      className="text-sm"
                     />
                   </div>
-                  <Button className="w-full mt-3" size="lg">
-                    Changer le mot de passe
+                  <Button className="w-full mt-2" size="sm">
+                    Change password
                   </Button>
                 </div>
 
-                <div className="border-t border-gray-200 pt-4">
-                  <h3 className="font-semibold text-gray-900 mb-2">Authentification biométrique</h3>
+                <div className="border-t border-border pt-3">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-600">Utiliser l&apos;empreinte digitale ou Face ID</p>
+                      <p className="text-sm text-card-foreground">Biometric authentication</p>
+                      <p className="text-xs text-muted-foreground">Use fingerprint or Face ID</p>
                     </div>
-                    <button className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-                      Activé
-                    </button>
+                    <Button variant="secondary" size="sm">
+                      Enabled
+                    </Button>
                   </div>
                 </div>
               </div>
-            )}
+            </CardContent>
+          </Card>
 
-            {activeTab === 'settings' && (
-              <div className="space-y-4">
+          {/* Settings Section */}
+          <Card className="border border-border">
+            <CardContent className="p-4">
+              <h3 className="font-medium text-card-foreground mb-3">Settings</h3>
+              <div className="space-y-3">
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Notifications</h3>
-                  <div className="space-y-3">
+                  <h4 className="text-sm font-medium text-card-foreground mb-2">Notifications</h4>
+                  <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-700">Notifications push</span>
-                      <button className="w-12 h-6 bg-blue-600 rounded-full relative">
-                        <div className="w-5 h-5 bg-white rounded-full absolute right-0.5 top-0.5"></div>
-                      </button>
+                      <span className="text-sm text-card-foreground">Push notifications</span>
+                      <Button variant="outline" size="sm">On</Button>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-700">Alertes de sécurité</span>
-                      <button className="w-12 h-6 bg-blue-600 rounded-full relative">
-                        <div className="w-5 h-5 bg-white rounded-full absolute right-0.5 top-0.5"></div>
-                      </button>
+                      <span className="text-sm text-card-foreground">Security alerts</span>
+                      <Button variant="outline" size="sm">On</Button>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-700">Mises à jour marketing</span>
-                      <button className="w-12 h-6 bg-gray-300 rounded-full relative">
-                        <div className="w-5 h-5 bg-white rounded-full absolute left-0.5 top-0.5"></div>
-                      </button>
+                      <span className="text-sm text-card-foreground">Marketing updates</span>
+                      <Button variant="outline" size="sm">Off</Button>
                     </div>
                   </div>
                 </div>
 
-                <div className="border-t border-gray-200 pt-4">
-                  <h3 className="font-semibold text-gray-900 mb-2">Langue</h3>
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    <option value="fr">Français</option>
+                <div className="border-t border-border pt-3">
+                  <h4 className="text-sm font-medium text-card-foreground mb-2">Language</h4>
+                  <select className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
                     <option value="en">English</option>
+                    <option value="fr">Français</option>
                   </select>
                 </div>
               </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Logout Button */}
-        <Button
-          onClick={handleLogout}
-          variant="destructive"
-          className="w-full"
-          size="lg"
-        >
-          Se déconnecter
-        </Button>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );

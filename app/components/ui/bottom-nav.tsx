@@ -6,11 +6,10 @@ import { Home, TrendingUp, Send, CreditCard, User } from 'lucide-react';
 import { Icon } from '../../../lib/icon';
 
 const menuItems = [
-  { name: 'Accueil', href: '/dashboard', icon: Home, label: 'Accueil' },
-  { name: 'Virements', href: '/send', icon: Send, label: 'Virements' },
-  { name: 'Cartes', href: '/cards', icon: CreditCard, label: 'Cartes' },
-  { name: 'Investir', href: '/invest', icon: TrendingUp, label: 'Investir' },
-  { name: 'Profil', href: '/account', icon: User, label: 'Profil' },
+  { name: 'Home', href: '/dashboard', icon: Home, label: 'Home' },
+  { name: 'Cards', href: '/cards', icon: CreditCard, label: 'Cards' },
+  { name: 'Analytics', href: '/analytics', icon: TrendingUp, label: 'Analytics' },
+  { name: 'Profile', href: '/account', icon: User, label: 'Profile' },
 ];
 
 export default function BottomNav() {
@@ -19,8 +18,8 @@ export default function BottomNav() {
   return (
     <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50">
       {/* Background with blur effect */}
-      <div className="bg-gray-900/80 backdrop-blur-lg border-t border-gray-700 shadow-lg">
-        <div className="flex items-center justify-around px-2 py-1">
+      <div className="bg-background/95 backdrop-blur-lg border-t border-border shadow-lg">
+        <div className="flex items-center justify-around px-2 py-1.5">
           {menuItems.map((item) => {
             const isActive = pathname === item.href;
             const IconComponent = item.icon;
@@ -29,37 +28,27 @@ export default function BottomNav() {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`relative flex flex-col items-center justify-center p-3 rounded-xl transition-all duration-200 min-w-0 flex-1 ${
+                className={`relative flex flex-col items-center justify-center p-2 rounded-lg transition-all duration-200 min-w-0 flex-1 ${
                   isActive
-                    ? 'text-primary bg-primary/20'
-                    : 'text-gray-400 hover:text-primary hover:bg-gray-800'
+                    ? 'text-primary'
+                    : 'text-muted-foreground active:text-primary'
                 }`}
               >
-                {/* Active indicator */}
-                {isActive && (
-                  <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-primary rounded-full" />
-                )}
-
                 {/* Icon */}
                 <Icon
                   icon={IconComponent}
                   size={20}
-                  className={`mb-1 transition-transform duration-200 ${
+                  className={`mb-0.5 transition-transform duration-200 ${
                     isActive ? 'scale-110' : ''
                   }`}
                 />
 
                 {/* Label */}
                 <span className={`text-xs font-medium truncate ${
-                  isActive ? 'text-primary' : 'text-gray-400'
+                  isActive ? 'text-primary font-semibold' : 'text-muted-foreground'
                 }`}>
                   {item.label}
                 </span>
-
-                {/* Active dot */}
-                {isActive && (
-                  <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-primary rounded-full" />
-                )}
               </Link>
             );
           })}
