@@ -2,21 +2,21 @@
 @import "tailwindcss";
 
 :root {
-  /* VaelixBank modern theme colors */
-  --background: #fafbfc;
-  --foreground: #0f172a;
+  /* Revolut-inspired theme colors */
+  --background: #f8fafc;
+  --foreground: #1e293b;
   --card: #ffffff;
-  --card-foreground: #0f172a;
+  --card-foreground: #1e293b;
   --popover: #ffffff;
-  --popover-foreground: #0f172a;
-  --primary: #3b82f6;
+  --popover-foreground: #1e293b;
+  --primary: #7c3aed;
   --primary-foreground: #ffffff;
   --secondary: #f1f5f9;
-  --secondary-foreground: #0f172a;
-  --muted: #f8fafc;
+  --secondary-foreground: #1e293b;
+  --muted: #f1f5f9;
   --muted-foreground: #64748b;
   --accent: #f1f5f9;
-  --accent-foreground: #0f172a;
+  --accent-foreground: #1e293b;
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
   --success: #10b981;
@@ -25,17 +25,24 @@
   --warning-foreground: #ffffff;
   --border: #e2e8f0;
   --input: #ffffff;
-  --ring: #3b82f6;
-  --radius: 0.75rem;
+  --ring: #7c3aed;
+  --radius: 1rem;
   
-  /* Banking specific colors */
-  --bank-primary: #2563eb;
-  --bank-secondary: #1e40af;
+  /* Revolut-style banking colors */
+  --bank-primary: #7c3aed;
+  --bank-secondary: #a855f7;
   --bank-accent: #06b6d4;
-  --bank-success: #059669;
-  --bank-warning: #d97706;
-  --bank-danger: #dc2626;
-  --bank-info: #0284c7;
+  --bank-success: #10b981;
+  --bank-warning: #f59e0b;
+  --bank-danger: #ef4444;
+  --bank-info: #3b82f6;
+  
+  /* Revolut gradient colors */
+  --gradient-primary: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+  --gradient-success: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+  --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+  --gradient-danger: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+  --gradient-info: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
 
   /* Shadows - Revolut style subtle shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -53,7 +60,7 @@
     --card-foreground: #f8fafc;
     --popover: #1e293b;
     --popover-foreground: #f8fafc;
-    --primary: #3b82f6;
+    --primary: #a855f7;
     --primary-foreground: #ffffff;
     --secondary: #334155;
     --secondary-foreground: #f8fafc;
@@ -69,16 +76,23 @@
     --warning-foreground: #ffffff;
     --border: #334155;
     --input: #1e293b;
-    --ring: #3b82f6;
+    --ring: #a855f7;
     
-    /* Banking specific colors - dark mode */
-    --bank-primary: #60a5fa;
-    --bank-secondary: #3b82f6;
+    /* Revolut-style banking colors - dark mode */
+    --bank-primary: #a855f7;
+    --bank-secondary: #c084fc;
     --bank-accent: #22d3ee;
     --bank-success: #34d399;
     --bank-warning: #fbbf24;
     --bank-danger: #f87171;
-    --bank-info: #38bdf8;
+    --bank-info: #60a5fa;
+    
+    /* Revolut gradient colors - dark mode */
+    --gradient-primary: linear-gradient(135deg, #a855f7 0%, #c084fc 100%);
+    --gradient-success: linear-gradient(135deg, #34d399 0%, #6ee7b7 100%);
+    --gradient-warning: linear-gradient(135deg, #fbbf24 0%, #fde68a 100%);
+    --gradient-danger: linear-gradient(135deg, #f87171 0%, #fca5a5 100%);
+    --gradient-info: linear-gradient(135deg, #60a5fa 0%, #93c5fd 100%);
 
     /* Shadows */
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
@@ -128,11 +142,11 @@ body {
   outline-offset: 2px;
 }
 
-/* Animations */
+/* Enhanced Animations for Smooth UX */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -143,7 +157,7 @@ body {
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
@@ -154,7 +168,7 @@ body {
 @keyframes slideInRight {
   from {
     opacity: 0;
-    transform: translateX(20px);
+    transform: translateX(16px);
   }
   to {
     opacity: 1;
@@ -162,17 +176,39 @@ body {
   }
 }
 
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes bounceIn {
   0% {
     opacity: 0;
-    transform: scale(0.3);
+    transform: scale(0.8);
   }
   50% {
     opacity: 1;
-    transform: scale(1.05);
+    transform: scale(1.02);
   }
   70% {
-    transform: scale(0.9);
+    transform: scale(0.98);
   }
   100% {
     opacity: 1;
@@ -183,7 +219,7 @@ body {
 @keyframes scaleIn {
   from {
     opacity: 0;
-    transform: scale(0.95);
+    transform: scale(0.96);
   }
   to {
     opacity: 1;
@@ -196,32 +232,93 @@ body {
     opacity: 1;
   }
   50% {
-    opacity: 0.5;
+    opacity: 0.6;
   }
 }
 
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(124, 58, 237, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(124, 58, 237, 0.6);
+  }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Enhanced Animation Classes */
 .animate-fade-in {
-  animation: fadeIn 0.5s ease-out;
+  animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .animate-fade-in-up {
-  animation: fadeInUp 0.6s ease-out;
+  animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .animate-slide-in-right {
-  animation: slideInRight 0.3s ease-out;
+  animation: slideInRight 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .animate-bounce-in {
-  animation: bounceIn 0.6s ease-out;
+  animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .animate-scale-in {
-  animation: scaleIn 0.2s ease-out;
+  animation: scaleIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .animate-pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, hsl(var(--muted)) 25%, hsl(var(--muted-foreground) / 0.1) 50%, hsl(var(--muted)) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
 }
 
 @keyframes slideInLeft {
@@ -298,9 +395,9 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
-/* Gradient backgrounds */
+/* Revolut-style gradient backgrounds */
 .gradient-primary {
-  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.8) 100%);
+  background: var(--gradient-primary);
 }
 
 .gradient-secondary {
@@ -308,15 +405,101 @@ body {
 }
 
 .gradient-success {
-  background: linear-gradient(135deg, hsl(var(--success-500)) 0%, hsl(var(--success-600)) 100%);
+  background: var(--gradient-success);
 }
 
 .gradient-warning {
-  background: linear-gradient(135deg, hsl(var(--warning-500)) 0%, hsl(var(--warning-600)) 100%);
+  background: var(--gradient-warning);
 }
 
 .gradient-danger {
-  background: linear-gradient(135deg, hsl(var(--danger-500)) 0%, hsl(var(--danger-600)) 100%);
+  background: var(--gradient-danger);
+}
+
+.gradient-info {
+  background: var(--gradient-info);
+}
+
+/* Revolut card styles */
+.revolut-card {
+  background: var(--gradient-primary);
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.revolut-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  transform: translate(30px, -30px);
+}
+
+.revolut-card-success {
+  background: var(--gradient-success);
+}
+
+.revolut-card-warning {
+  background: var(--gradient-warning);
+}
+
+.revolut-card-danger {
+  background: var(--gradient-danger);
+}
+
+.revolut-card-info {
+  background: var(--gradient-info);
+}
+
+/* Revolut button styles */
+.revolut-button {
+  background: var(--gradient-primary);
+  border: none;
+  border-radius: 1rem;
+  padding: 0.75rem 1.5rem;
+  color: white;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.revolut-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4);
+}
+
+.revolut-button:active {
+  transform: translateY(0);
+}
+
+/* Revolut floating action button */
+.revolut-fab {
+  position: fixed;
+  bottom: 6rem;
+  right: 1rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  background: var(--gradient-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4);
+  z-index: 40;
+  transition: all 0.2s ease;
+}
+
+.revolut-fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 12px 24px rgba(124, 58, 237, 0.5);
 }
 
 /* Transition utilities */
@@ -349,7 +532,7 @@ body {
   transform: scale(1.02);
 }
 
-/* Utility classes */
+/* Enhanced Utility Classes for Smooth UX */
 .text-balance {
   text-wrap: balance;
 }
@@ -362,6 +545,116 @@ body {
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* Touch and Interaction Enhancements */
+.touch-manipulation {
+  touch-action: manipulation;
+}
+
+.tap-highlight-none {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.select-none {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Smooth Scrolling */
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced Hover States */
+.hover-lift {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+.hover-scale {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+.hover-scale:active {
+  transform: scale(0.98);
+}
+
+/* Ripple Effect */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.ripple:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Loading States */
+.skeleton {
+  background: linear-gradient(90deg, hsl(var(--muted)) 25%, hsl(var(--muted-foreground) / 0.1) 50%, hsl(var(--muted)) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Focus States */
+.focus-ring {
+  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.focus-ring:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.3);
+}
+
+/* Smooth Transitions */
+.transition-smooth {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-colors {
+  transition: color 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-transform {
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .mobile-touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .mobile-safe-area {
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-top: env(safe-area-inset-top);
+  }
 }
 
 .prose-custom {

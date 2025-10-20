@@ -27,6 +27,7 @@ export interface TransactionItemProps extends React.HTMLAttributes<HTMLDivElemen
   status?: 'completed' | 'pending' | 'failed';
   merchant?: string;
   showDetails?: boolean;
+  variant?: 'default' | 'revolut';
   onPress?: () => void;
 }
 
@@ -41,6 +42,7 @@ const TransactionItem = forwardRef<HTMLDivElement, TransactionItemProps>(
     status = 'completed',
     merchant,
     showDetails = false,
+    variant = 'revolut',
     onPress,
     ...props 
   }, ref) => {
@@ -110,6 +112,96 @@ const TransactionItem = forwardRef<HTMLDivElement, TransactionItemProps>(
     };
 
     const CategoryIcon = getCategoryIcon(category);
+
+    if (variant === 'revolut') {
+      return (
+        <div
+          ref={ref}
+          className={cn(
+            'bg-white rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group hover:scale-[1.01]',
+            className
+          )}
+          onClick={onPress}
+          {...props}
+        >
+          <div className="flex items-center space-x-4">
+            {/* Icon */}
+            <div className={cn(
+              'flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm',
+              isIncome 
+                ? 'bg-green-100 text-green-600' 
+                : isTransfer 
+                ? 'bg-blue-100 text-blue-600'
+                : 'bg-red-100 text-red-600'
+            )}>
+              <Icon icon={CategoryIcon} size={20} />
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between">
+                <div className="min-w-0 flex-1">
+                  <h4 className="text-base font-semibold text-gray-900 truncate">
+                    {description}
+                  </h4>
+                  {merchant && (
+                    <p className="text-sm text-gray-600 truncate">
+                      {merchant}
+                    </p>
+                  )}
+                  <div className="flex items-center space-x-2 mt-1">
+                    <span className="text-xs text-gray-500">
+                      {formatDate(date)}
+                    </span>
+                    {category && (
+                      <>
+                        <span className="text-xs text-gray-400">•</span>
+                        <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                          {category}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                {/* Amount and Status */}
+                <div className="flex flex-col items-end space-y-1">
+                  <div className={cn(
+                    'text-lg font-bold',
+                    isIncome ? 'text-green-600' : 'text-red-600'
+                  )}>
+                    {isIncome ? '+' : ''}€{formatAmount(amount)}
+                  </div>
+                  <div className={cn(
+                    'inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold',
+                    status === 'completed' 
+                      ? 'bg-green-100 text-green-800' 
+                      : status === 'pending'
+                      ? 'bg-yellow-100 text-yellow-800'
+                      : 'bg-gray-100 text-gray-600'
+                  )}>
+                    {status === 'completed' ? 'Terminé' : 
+                     status === 'pending' ? 'En cours' : 'Échec'}
+                  </div>
+                </div>
+              </div>
+
+              {/* Additional Details */}
+              {showDetails && (
+                <div className="mt-3 pt-3 border-t border-gray-200">
+                  <div className="flex items-center justify-between text-xs text-gray-500">
+                    <span>ID: {props.id?.slice(-8)}</span>
+                    <button className="p-1 rounded-lg hover:bg-gray-100 transition-colors">
+                      <Icon icon={MoreHorizontal} size={14} />
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
 
     return (
       <Card

@@ -170,127 +170,129 @@ export default function Cards() {
   );
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="max-w-md mx-auto px-4 py-6 space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between pt-4">
           <div>
-            <h1 className="text-xl font-semibold text-foreground">Cards</h1>
-            <p className="text-muted-foreground text-sm mt-1">Manage your payment cards</p>
+            <h1 className="text-3xl font-bold text-gray-900">Mes cartes</h1>
+            <p className="text-gray-600 text-sm mt-1">Gérez vos cartes bancaires et paiements</p>
           </div>
-          <Button variant="outline" size="sm">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-            </svg>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-2xl bg-white/80 backdrop-blur-sm shadow-lg hover:bg-white/90"
+          >
+            <Icon icon={Plus} size={20} className="text-gray-600" />
           </Button>
         </div>
-      </div>
 
-      {/* Cards List */}
-      <div className="space-y-4">
         {/* Balance Summary */}
-        <Card className="border border-border">
-          <CardContent className="p-4">
-            <div className="flex justify-between items-center mb-3">
-              <div>
-                <p className="text-sm text-muted-foreground">Total card balance</p>
-                <p className="text-2xl font-bold text-foreground">€{cards.reduce((total, card) => total + card.balance, 0).toFixed(2)}</p>
-              </div>
-              <div className="text-right">
-                <p className="text-sm text-muted-foreground">Total limit</p>
-                <p className="text-lg font-semibold text-foreground">€{cards.reduce((total, card) => total + card.limit, 0).toLocaleString()}</p>
-              </div>
+        <div className="revolut-card p-6">
+          <div className="flex justify-between items-center mb-4">
+            <div>
+              <p className="text-sm text-white/80 font-medium">Solde total des cartes</p>
+              <p className="text-3xl font-bold text-white">€{cards.reduce((total, card) => total + card.balance, 0).toFixed(2)}</p>
             </div>
-            <div className="w-full bg-muted rounded-full h-2">
-              <div className="bg-primary h-2 rounded-full" style={{width: `${(cards.reduce((total, card) => total + card.balance, 0) / cards.reduce((total, card) => total + card.limit, 0)) * 100}%`}}></div>
+            <div className="text-right">
+              <p className="text-sm text-white/80 font-medium">Limite totale</p>
+              <p className="text-xl font-semibold text-white">€{cards.reduce((total, card) => total + card.limit, 0).toLocaleString()}</p>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+          <div className="w-full bg-white/20 rounded-full h-3">
+            <div className="bg-white h-3 rounded-full transition-all duration-500" style={{width: `${(cards.reduce((total, card) => total + card.balance, 0) / cards.reduce((total, card) => total + card.limit, 0)) * 100}%`}}></div>
+          </div>
+        </div>
 
         {/* Cards Grid */}
-        <div className="space-y-3">
+        <div className="space-y-4">
           {cards.map((card, index) => (
-             <Card key={card.id} className="border border-border animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
-               <CardContent className="p-4">
-                 <div className="flex items-center justify-between mb-3">
-                   <div className="flex items-center space-x-3">
-                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${card.type === 'debit' ? 'bg-purple-50' : card.type === 'business' ? 'bg-green-50' : 'bg-orange-50'}`}>
-                       {getCardIcon(card.type)}
-                     </div>
-                     <div>
-                       <h3 className="font-medium text-card-foreground text-sm">{card.name}</h3>
-                       <p className="text-xs text-muted-foreground">{card.number}</p>
-                     </div>
-                   </div>
-                   <div className="text-right">
-                     <p className="text-sm font-bold text-card-foreground">€{card.balance.toFixed(2)}</p>
-                     <p className="text-xs text-muted-foreground">Exp {card.expiry}</p>
-                   </div>
-                 </div>
+            <div 
+              key={card.id} 
+              className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in hover:scale-[1.02]" 
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center space-x-4">
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg ${
+                    card.type === 'debit' ? 'bg-gradient-to-br from-purple-500 to-purple-600' : 
+                    card.type === 'business' ? 'bg-gradient-to-br from-green-500 to-green-600' : 
+                    'bg-gradient-to-br from-orange-500 to-orange-600'
+                  }`}>
+                    {getCardIcon(card.type)}
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900 text-lg">{card.name}</h3>
+                    <p className="text-sm text-gray-600">{card.number}</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-2xl font-bold text-gray-900">€{card.balance.toFixed(2)}</p>
+                  <p className="text-sm text-gray-500">Exp {card.expiry}</p>
+                </div>
+              </div>
 
-                 {/* Wallet Actions */}
-                 <div className="space-y-2">
-                   {walletError && (
-                     <div className="bg-red-50 border border-red-200 rounded-lg p-2">
-                       <p className="text-red-600 text-xs">{walletError}</p>
-                     </div>
-                   )}
+              {/* Wallet Actions */}
+              <div className="space-y-3">
+                {walletError && (
+                  <div className="bg-red-50 border border-red-200 rounded-xl p-3">
+                    <p className="text-red-600 text-sm">{walletError}</p>
+                  </div>
+                )}
 
-                   {/* Apple Pay - iOS only */}
-                   {isIOS() && WalletService.isApplePaySupported() && (
-                     <Button
-                       onClick={() => handleAddToApplePay(card)}
-                       disabled={walletLoading === `apple_${card.id}` || isCardInWallet(card.id, 'apple_pay')}
-                       variant={isCardInWallet(card.id, 'apple_pay') ? "secondary" : "default"}
-                       size="sm"
-                       className="w-full"
-                     >
-                       {walletLoading === `apple_${card.id}` ? (
-                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
-                       ) : isCardInWallet(card.id, 'apple_pay') ? (
-                         'Added to Apple Wallet'
-                       ) : (
-                         'Add to Apple Wallet'
-                       )}
-                     </Button>
-                   )}
+                {/* Apple Pay - iOS only */}
+                {isIOS() && WalletService.isApplePaySupported() && (
+                  <Button
+                    onClick={() => handleAddToApplePay(card)}
+                    disabled={walletLoading === `apple_${card.id}` || isCardInWallet(card.id, 'apple_pay')}
+                    variant={isCardInWallet(card.id, 'apple_pay') ? "secondary" : "default"}
+                    size="sm"
+                    className="w-full rounded-xl"
+                  >
+                    {walletLoading === `apple_${card.id}` ? (
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
+                    ) : isCardInWallet(card.id, 'apple_pay') ? (
+                      'Ajouté à Apple Wallet'
+                    ) : (
+                      'Ajouter à Apple Wallet'
+                    )}
+                  </Button>
+                )}
 
-                   {/* Google Pay - Android only */}
-                   {isAndroid() && WalletService.isGooglePaySupported() && (
-                     <Button
-                       onClick={() => handleAddToGooglePay(card)}
-                       disabled={walletLoading === `google_${card.id}` || isCardInWallet(card.id, 'google_pay')}
-                       variant={isCardInWallet(card.id, 'google_pay') ? "secondary" : "outline"}
-                       size="sm"
-                       className="w-full"
-                     >
-                       {walletLoading === `google_${card.id}` ? (
-                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
-                       ) : isCardInWallet(card.id, 'google_pay') ? (
-                         'Added to Google Wallet'
-                       ) : (
-                         'Add to Google Wallet'
-                       )}
-                     </Button>
-                   )}
-                 </div>
-               </CardContent>
-             </Card>
-           ))}
+                {/* Google Pay - Android only */}
+                {isAndroid() && WalletService.isGooglePaySupported() && (
+                  <Button
+                    onClick={() => handleAddToGooglePay(card)}
+                    disabled={walletLoading === `google_${card.id}` || isCardInWallet(card.id, 'google_pay')}
+                    variant={isCardInWallet(card.id, 'google_pay') ? "secondary" : "outline"}
+                    size="sm"
+                    className="w-full rounded-xl"
+                  >
+                    {walletLoading === `google_${card.id}` ? (
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
+                    ) : isCardInWallet(card.id, 'google_pay') ? (
+                      'Ajouté à Google Wallet'
+                    ) : (
+                      'Ajouter à Google Wallet'
+                    )}
+                  </Button>
+                )}
+              </div>
+            </div>
+          ))}
 
           {/* Add New Card */}
-          <Card className="border-2 border-dashed border-border hover:border-primary/50 transition-colors cursor-pointer">
-            <CardContent className="p-6 text-center">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
-                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
-              </div>
-              <h3 className="font-medium text-card-foreground mb-1">New card</h3>
-              <p className="text-sm text-muted-foreground">Request a physical or virtual card</p>
-            </CardContent>
-          </Card>
+          <div className="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border-2 border-dashed border-gray-300 hover:border-purple-400">
+            <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <Icon icon={Plus} size={32} className="text-purple-600" />
+            </div>
+            <h3 className="font-bold text-gray-900 text-lg mb-2">Nouvelle carte</h3>
+            <p className="text-gray-600 text-sm">Demandez une carte physique ou virtuelle</p>
+          </div>
         </div>
+
+        {/* Bottom Spacing for Mobile Navigation */}
+        <div className="h-20" />
       </div>
     </div>
   );

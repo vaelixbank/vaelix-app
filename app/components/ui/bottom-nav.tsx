@@ -2,14 +2,15 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, TrendingUp, Send, CreditCard, User } from 'lucide-react';
+import { Home, BarChart3, ArrowUpDown, Coins, Star } from 'lucide-react';
 import { Icon } from '../../../lib/icon';
 
 const menuItems = [
-  { name: 'Home', href: '/dashboard', icon: Home, label: 'Home' },
-  { name: 'Cards', href: '/cards', icon: CreditCard, label: 'Cards' },
-  { name: 'Analytics', href: '/analytics', icon: TrendingUp, label: 'Analytics' },
-  { name: 'Profile', href: '/account', icon: User, label: 'Profile' },
+  { name: 'Home', href: '/dashboard', icon: Home, label: 'Accueil' },
+  { name: 'Invest', href: '/invest', icon: BarChart3, label: 'Investir' },
+  { name: 'Transfer', href: '/send', icon: ArrowUpDown, label: 'Virements' },
+  { name: 'Crypto', href: '/cryptos', icon: Coins, label: 'Cryptos' },
+  { name: 'Points', href: '/account', icon: Star, label: 'RevPoints' },
 ];
 
 export default function BottomNav() {
@@ -17,46 +18,45 @@ export default function BottomNav() {
 
   return (
     <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50">
-      {/* Background with blur effect */}
-      <div className="bg-background/95 backdrop-blur-lg border-t border-border shadow-lg">
-        <div className="flex items-center justify-around px-2 py-1.5">
-          {menuItems.map((item) => {
-            const isActive = pathname === item.href;
-            const IconComponent = item.icon;
+      <div className="pointer-events-none px-4 pb-3">
+        {/* Floating pill container - Revolut style */}
+        <div className="pointer-events-auto mx-auto max-w-md rounded-2xl bg-slate-800/90 backdrop-blur-xl border border-slate-700/60 shadow-2xl shadow-black/20 animate-fade-in-up">
+          <div className="flex items-center justify-between px-3 py-2">
+            {menuItems.map((item, index) => {
+              const isActive = pathname === item.href;
+              const IconComponent = item.icon;
 
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`relative flex flex-col items-center justify-center p-2 rounded-lg transition-all duration-200 min-w-0 flex-1 ${
-                  isActive
-                    ? 'text-primary'
-                    : 'text-muted-foreground active:text-primary'
-                }`}
-              >
-                {/* Icon */}
-                <Icon
-                  icon={IconComponent}
-                  size={20}
-                  className={`mb-0.5 transition-transform duration-200 ${
-                    isActive ? 'scale-110' : ''
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`relative flex-1 inline-flex flex-col items-center justify-center gap-1 rounded-xl px-2 py-2 transition-smooth group mobile-touch-target ripple tap-highlight-none ${
+                    isActive ? 'text-white' : 'text-slate-400 hover:text-slate-200'
                   }`}
-                />
+                  style={{ animationDelay: `${0.1 + index * 0.05}s` }}
+                >
+                  {/* Active backdrop pill */}
+                  {isActive && (
+                    <span className="absolute inset-0 z-0 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg animate-glow" />
+                  )}
 
-                {/* Label */}
-                <span className={`text-xs font-medium truncate ${
-                  isActive ? 'text-primary font-semibold' : 'text-muted-foreground'
-                }`}>
-                  {item.label}
-                </span>
-              </Link>
-            );
-          })}
+                  <span className="relative z-10 flex flex-col items-center gap-1">
+                    <Icon
+                      icon={IconComponent}
+                      size={20}
+                      className={`transition-transform duration-200 group-hover:scale-110 ${isActive ? 'text-white' : 'text-current'}`}
+                    />
+                    <span className={`text-[10px] font-medium transition-colors ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-200'}`}>{item.label}</span>
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
         </div>
-
-        {/* Safe area padding for devices with home indicator */}
-        <div className="h-safe-area-inset-bottom" />
       </div>
+
+      {/* Safe area padding for devices with home indicator */}
+      <div className="h-safe-area-inset-bottom" />
     </nav>
   );
 }

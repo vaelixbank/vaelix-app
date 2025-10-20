@@ -4,7 +4,7 @@ import { forwardRef } from 'react';
 import { Card, CardContent } from './card';
 import { Badge } from './badge';
 import { Icon } from '../../../lib/icon';
-import { Eye, EyeOff, TrendingUp, TrendingDown } from 'lucide-react';
+import { Eye, EyeOff, TrendingUp, TrendingDown, Wallet } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
 export interface BalanceCardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -15,7 +15,7 @@ export interface BalanceCardProps extends React.HTMLAttributes<HTMLDivElement> {
   changeType?: 'positive' | 'negative' | 'neutral';
   showBalance?: boolean;
   onToggleBalance?: () => void;
-  variant?: 'default' | 'primary' | 'success' | 'warning';
+  variant?: 'default' | 'primary' | 'success' | 'warning' | 'revolut';
   icon?: React.ComponentType<{ className?: string }>;
 }
 
@@ -29,8 +29,8 @@ const BalanceCard = forwardRef<HTMLDivElement, BalanceCardProps>(
     changeType = 'neutral',
     showBalance = true,
     onToggleBalance,
-    variant = 'default',
-    icon: IconComponent,
+    variant = 'revolut',
+    icon: IconComponent = Wallet,
     ...props 
   }, ref) => {
     const formatAmount = (value: number) => {
@@ -50,13 +50,73 @@ const BalanceCard = forwardRef<HTMLDivElement, BalanceCardProps>(
       primary: 'bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-primary/20',
       success: 'bg-gradient-to-br from-success/10 via-success/5 to-transparent border-success/20',
       warning: 'bg-gradient-to-br from-warning/10 via-warning/5 to-transparent border-warning/20',
+      revolut: 'revolut-card',
     };
 
     const changeColorClasses = {
-      positive: 'text-success',
-      negative: 'text-destructive',
-      neutral: 'text-muted-foreground',
+      positive: 'text-white/90',
+      negative: 'text-white/70',
+      neutral: 'text-white/80',
     };
+
+    if (variant === 'revolut') {
+      return (
+        <div
+          ref={ref}
+          className={cn(
+            'revolut-card relative overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-xl',
+            className
+          )}
+          {...props}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between mb-6 relative z-10">
+            <div className="flex items-center space-x-3">
+              <div className="p-2 rounded-xl bg-white/20 backdrop-blur-sm">
+                <IconComponent className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-sm font-medium text-white/90">{title}</h3>
+            </div>
+            {onToggleBalance && (
+              <button
+                onClick={onToggleBalance}
+                className="p-2 rounded-xl bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-colors"
+                aria-label={showBalance ? 'Hide balance' : 'Show balance'}
+              >
+                <Icon icon={showBalance ? Eye : EyeOff} size={18} className="text-white" />
+              </button>
+            )}
+          </div>
+
+          {/* Amount */}
+          <div className="mb-6 relative z-10">
+            <div className="text-4xl font-bold text-white mb-2">
+              {showBalance ? `${currency}${formatAmount(amount)}` : '••••••'}
+            </div>
+            {change !== undefined && showBalance && (
+              <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-1 px-2 py-1 rounded-full bg-white/20 backdrop-blur-sm">
+                  <Icon 
+                    icon={changeType === 'positive' ? TrendingUp : changeType === 'negative' ? TrendingDown : TrendingUp} 
+                    size={14} 
+                    className={changeColorClasses[changeType]}
+                  />
+                  <span className={`text-sm font-semibold ${changeColorClasses[changeType]}`}>
+                    {formatChange(change)}
+                  </span>
+                </div>
+                <span className="text-xs text-white/70">ce mois</span>
+              </div>
+            )}
+          </div>
+
+          {/* Decorative elements */}
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16" />
+          <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full translate-y-12 -translate-x-12" />
+          <div className="absolute top-1/2 right-1/4 w-16 h-16 bg-white/5 rounded-full" />
+        </div>
+      );
+    }
 
     return (
       <Card

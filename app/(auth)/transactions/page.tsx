@@ -89,54 +89,54 @@ export default function Transactions() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <div className="max-w-md mx-auto px-4 py-6 space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between pt-4">
           <div className="flex items-center space-x-3">
             <Button
               variant="ghost"
               size="icon"
               onClick={() => router.back()}
-              className="rounded-full"
+              className="rounded-2xl bg-white/80 backdrop-blur-sm shadow-lg hover:bg-white/90"
             >
-              <Icon icon={ArrowLeft} size={20} />
+              <Icon icon={ArrowLeft} size={20} className="text-gray-600" />
             </Button>
             <div>
-              <h1 className="text-2xl font-bold text-foreground">Transactions</h1>
-              <p className="text-muted-foreground text-sm">Historique de vos opérations</p>
+              <h1 className="text-2xl font-bold text-gray-900">Transactions</h1>
+              <p className="text-gray-600 text-sm">Historique de vos opérations</p>
             </div>
           </div>
-          <Button variant="ghost" size="icon" className="rounded-full">
-            <Icon icon={MoreHorizontal} size={20} />
+          <Button variant="ghost" size="icon" className="rounded-2xl bg-white/80 backdrop-blur-sm shadow-lg hover:bg-white/90">
+            <Icon icon={MoreHorizontal} size={20} className="text-gray-600" />
           </Button>
         </div>
 
         {/* Monthly Summary */}
         <div className="grid grid-cols-2 gap-4">
-          <Card variant="gradient" className="p-4">
+          <div className="revolut-card-success p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-muted-foreground font-medium">Revenus</p>
-                <p className="text-lg font-bold text-success">€{monthlyIncome.toLocaleString('fr-FR')}</p>
+                <p className="text-xs text-white/80 font-medium">Revenus</p>
+                <p className="text-xl font-bold text-white">€{monthlyIncome.toLocaleString('fr-FR')}</p>
               </div>
-              <div className="w-8 h-8 bg-success/10 rounded-lg flex items-center justify-center">
-                <Icon icon={TrendingUp} size={16} className="text-success" />
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                <Icon icon={TrendingUp} size={20} className="text-white" />
               </div>
             </div>
-          </Card>
+          </div>
 
-          <Card variant="gradient" className="p-4">
+          <div className="revolut-card-danger p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-muted-foreground font-medium">Dépenses</p>
-                <p className="text-lg font-bold text-destructive">€{monthlyExpenses.toLocaleString('fr-FR')}</p>
+                <p className="text-xs text-white/80 font-medium">Dépenses</p>
+                <p className="text-xl font-bold text-white">€{monthlyExpenses.toLocaleString('fr-FR')}</p>
               </div>
-              <div className="w-8 h-8 bg-destructive/10 rounded-lg flex items-center justify-center">
-                <Icon icon={TrendingDown} size={16} className="text-destructive" />
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                <Icon icon={TrendingDown} size={20} className="text-white" />
               </div>
             </div>
-          </Card>
+          </div>
         </div>
 
         {/* Search and Filters */}
@@ -203,15 +203,15 @@ export default function Transactions() {
           </div>
 
           {filteredTransactions.length === 0 ? (
-            <Card className="p-8 text-center">
-              <div className="w-16 h-16 bg-muted/50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Icon icon={Search} size={24} className="text-muted-foreground" />
+            <div className="bg-white rounded-2xl p-8 text-center shadow-lg">
+              <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Icon icon={Search} size={24} className="text-gray-500" />
               </div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">Aucune transaction trouvée</h3>
-              <p className="text-muted-foreground text-sm">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Aucune transaction trouvée</h3>
+              <p className="text-gray-600 text-sm">
                 Essayez de modifier vos filtres ou votre recherche
               </p>
-            </Card>
+            </div>
           ) : (
             <div className="space-y-3">
               {filteredTransactions.map((transaction, index) => (
@@ -226,6 +226,7 @@ export default function Transactions() {
                   status={transaction.status}
                   merchant={transaction.merchant}
                   showDetails={true}
+                  variant="revolut"
                   className="animate-slide-in-up"
                   style={{ animationDelay: `${index * 0.1}s` }}
                   onPress={() => {
