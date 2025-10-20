@@ -96,45 +96,38 @@ export default function Dashboard() {
       </div>
 
       <div className="relative z-10 max-w-md mx-auto lg:max-w-4xl px-4 py-4 space-y-6">
-        {/* Header - Exact Revolut style */}
-        <div className="flex items-center justify-between pt-2">
-          {/* Left: Time + Arrow */}
-          <div className="flex items-center space-x-2">
-            <span className="text-white font-medium text-lg">{getCurrentTime()}</span>
-            <Icon icon={ChevronUp} size={16} className="text-white/60" />
+        {/* Header - New design based on image */}
+        <div className="flex items-center justify-between pt-2 pb-4">
+          {/* Left: Avatar with notification */}
+          <div className="relative">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-slate-600 to-slate-800 flex items-center justify-center border border-slate-500">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-slate-400 to-slate-600 flex items-center justify-center">
+                <span className="text-white font-bold text-xs">VB</span>
+              </div>
+            </div>
+            <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
           </div>
           
-          {/* Center: Avatar + Search + Icons */}
-          <div className="flex items-center space-x-3 flex-1 justify-center">
-            {/* Avatar with notification */}
+          {/* Center: Search Bar */}
+          <div className="flex-1 max-w-xs mx-4">
             <div className="relative">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                <span className="text-white font-bold text-sm">VB</span>
-              </div>
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
+              <Icon icon={Search} size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Rechercher"
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-800/50 border border-slate-700 rounded-xl text-white placeholder:text-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent"
+              />
             </div>
-            
-            {/* Search Bar */}
-            <div className="flex-1 max-w-xs">
-              <div className="relative">
-                <Icon icon={Search} size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
-                <input
-                  type="text"
-                  placeholder="Rechercher"
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-800/50 border border-slate-700 rounded-xl text-white placeholder:text-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent"
-                />
-              </div>
-            </div>
-            
-            {/* Right Icons */}
-            <div className="flex items-center space-x-2">
-              <button className="p-2 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 transition-colors">
-                <Icon icon={BarChart3} size={18} className="text-slate-300" />
-              </button>
-              <button className="p-2 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 transition-colors">
-                <Icon icon={CreditCard} size={18} className="text-slate-300" />
-              </button>
-            </div>
+          </div>
+          
+          {/* Right Icons */}
+          <div className="flex items-center space-x-2">
+            <button className="p-2 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 transition-colors">
+              <Icon icon={BarChart3} size={18} className="text-slate-300" />
+            </button>
+            <button className="p-2 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 transition-colors">
+              <Icon icon={CreditCard} size={18} className="text-slate-300" />
+            </button>
           </div>
         </div>
 
@@ -152,11 +145,9 @@ export default function Dashboard() {
           </button>
         </div>
         
-        {/* Carousel Indicators - 5 dots */}
+        {/* Carousel Indicators - 3 dots */}
         <div className="flex justify-center space-x-2">
           <div className="w-2 h-2 bg-white rounded-full"></div>
-          <div className="w-2 h-2 bg-slate-500 rounded-full"></div>
-          <div className="w-2 h-2 bg-slate-500 rounded-full"></div>
           <div className="w-2 h-2 bg-slate-500 rounded-full"></div>
           <div className="w-2 h-2 bg-slate-500 rounded-full"></div>
         </div>
