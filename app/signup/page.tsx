@@ -2,16 +2,23 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
+import { Badge } from '../components/ui/badge';
 import { Icon } from '../../lib/icon';
-import { Eye, EyeOff, Lock, Mail, User, Shield } from 'lucide-react';
+import { useStore } from '../lib/store';
+import { Eye, EyeOff, Lock, Mail, Shield, ArrowRight, Smartphone, User, Check } from 'lucide-react';
 
 export default function Signup() {
+  const router = useRouter();
+  const { setUser, setAuthenticated } = useStore();
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
+    phone: '',
     password: '',
     confirmPassword: '',
     acceptTerms: false
@@ -20,7 +27,7 @@ export default function Signup() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [step, setStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(1);
 
   const handleInputChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -28,24 +35,20 @@ export default function Signup() {
   };
 
   const validateStep1 = () => {
-    if (!formData.name.trim()) {
-      setError('Le nom complet est requis');
+    if (!formData.firstName || !formData.lastName || !formData.email) {
+      setError('Veuillez remplir tous les champs obligatoires');
       return false;
     }
-    if (!formData.email.trim()) {
-      setError('L\'adresse email est requise');
-      return false;
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      setError('L\'adresse email n\'est pas valide');
+    if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      setError('Veuillez saisir une adresse email valide');
       return false;
     }
     return true;
   };
 
   const validateStep2 = () => {
-    if (!formData.password) {
-      setError('Le mot de passe est requis');
+    if (!formData.phone || !formData.password || !formData.confirmPassword) {
+      setError('Veuillez remplir tous les champs obligatoires');
       return false;
     }
     if (formData.password.length < 8) {
@@ -56,23 +59,22 @@ export default function Signup() {
       setError('Les mots de passe ne correspondent pas');
       return false;
     }
-    if (!formData.acceptTerms) {
-      setError('Vous devez accepter les conditions d\'utilisation');
-      return false;
-    }
     return true;
   };
 
   const handleNext = () => {
-    if (step === 1 && validateStep1()) {
-      setStep(2);
+    if (currentStep === 1 && validateStep1()) {
+      setCurrentStep(2);
+    } else if (currentStep === 2 && validateStep2()) {
+      setCurrentStep(3);
     }
   };
 
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!validateStep2()) return;
+  const handleSignup = async () => {
+    if (!formData.acceptTerms) {
+      setError('Veuillez accepter les conditions d\'utilisation');
+      return;
+    }
 
     setIsLoading(true);
     setError('');
@@ -81,22 +83,33 @@ export default function Signup() {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000));
 
-      // Mock signup
-      localStorage.setItem('user', JSON.stringify({
+      const user = {
+        id: Date.now().toString(),
         email: formData.email,
-        name: formData.name,
-        balance: 0
-      }));
+        name: `${formData.firstName} ${formData.lastName}`,
+        avatar: '',
+        phone: formData.phone,
+        accounts: [],
+        preferences: {
+          currency: 'EUR',
+          language: 'fr',
+          notifications: true,
+          biometricAuth: false
+        },
+        createdAt: new Date().toISOString()
+      };
 
-      window.location.href = '/dashboard';
+      setUser(user);
+      setAuthenticated(true);
+      router.push('/dashboard');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Une erreur est survenue lors de l\'inscription');
+      setError(err instanceof Error ? err.message : 'Une erreur est survenue');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const passwordStrength = (password: string) => {
+  const getPasswordStrength = (password: string) => {
     let strength = 0;
     if (password.length >= 8) strength++;
     if (/[A-Z]/.test(password)) strength++;
@@ -106,250 +119,308 @@ export default function Signup() {
     return strength;
   };
 
-  const getPasswordStrengthColor = (strength: number) => {
-    if (strength <= 2) return 'bg-red-500';
-    if (strength <= 3) return 'bg-yellow-500';
-    return 'bg-green-500';
-  };
-
-  const getPasswordStrengthText = (strength: number) => {
-    if (strength <= 2) return 'Faible';
-    if (strength <= 3) return 'Moyen';
-    return 'Fort';
-  };
+  const passwordStrength = getPasswordStrength(formData.password);
+  const strengthLabels = ['Très faible', 'Faible', 'Moyen', 'Bon', 'Très bon'];
+  const strengthColors = ['bg-destructive', 'bg-orange-500', 'bg-yellow-500', 'bg-blue-500', 'bg-success'];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/10 via-gray-900 to-secondary/10 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5 flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-8">
         {/* Logo */}
         <div className="text-center animate-fade-in-up">
-          <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-            <Icon icon={Shield} size={32} className="text-white" />
+          <div className="w-20 h-20 bg-gradient-to-br from-primary to-primary/80 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl">
+            <Icon icon={Shield} size={40} className="text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-100">VaelixBank</h1>
-          <p className="text-gray-400 mt-2">Créez votre compte bancaire digital</p>
+          <h1 className="text-4xl font-bold text-foreground mb-2">VaelixBank</h1>
+          <p className="text-muted-foreground text-lg">Rejoignez la révolution bancaire</p>
+          <Badge variant="banking" className="mt-3">
+            🚀 Gratuit et sans engagement
+          </Badge>
         </div>
 
         {/* Progress Indicator */}
-        <div className="flex justify-center animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-          <div className="flex items-center space-x-4">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-              step >= 1 ? 'bg-primary text-white' : 'bg-gray-700 text-gray-400'
-            }`}>
-              1
+        <div className="flex items-center justify-center space-x-2">
+          {[1, 2, 3].map((step) => (
+            <div
+              key={step}
+              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-all ${
+                step <= currentStep
+                  ? 'bg-primary text-white'
+                  : 'bg-muted text-muted-foreground'
+              }`}
+            >
+              {step < currentStep ? <Icon icon={Check} size={16} /> : step}
             </div>
-            <div className={`w-12 h-0.5 ${step >= 2 ? 'bg-primary' : 'bg-gray-200'}`} />
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-              step >= 2 ? 'bg-primary text-white' : 'bg-gray-700 text-gray-400'
-            }`}>
-              2
-            </div>
-          </div>
+          ))}
         </div>
 
         {/* Signup Card */}
-        <Card className="shadow-xl border-0 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl text-center">
-              {step === 1 ? 'Informations personnelles' : 'Sécurité du compte'}
+        <Card className="shadow-2xl border-0 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+          <CardHeader className="space-y-2 pb-4">
+            <CardTitle className="text-2xl text-center text-foreground">
+              {currentStep === 1 && 'Informations personnelles'}
+              {currentStep === 2 && 'Sécurité'}
+              {currentStep === 3 && 'Finalisation'}
             </CardTitle>
-            <CardDescription className="text-center">
-              {step === 1
-                ? 'Renseignez vos informations de base'
-                : 'Créez un mot de passe sécurisé'
-              }
+            <CardDescription className="text-center text-muted-foreground">
+              {currentStep === 1 && 'Renseignez vos informations de base'}
+              {currentStep === 2 && 'Créez un mot de passe sécurisé'}
+              {currentStep === 3 && 'Acceptez les conditions et finalisez'}
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <form onSubmit={step === 1 ? (e) => { e.preventDefault(); handleNext(); } : handleSignup} className="space-y-4" role="form" aria-label="Formulaire d'inscription">
-              {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm animate-fade-in" role="alert" aria-live="polite" id="signup-error">
-                  {error}
+          <CardContent className="space-y-6">
+            {error && (
+              <div className="bg-destructive/10 border border-destructive/20 text-destructive px-4 py-3 rounded-xl text-sm animate-fade-in flex items-center space-x-2" role="alert" aria-live="polite">
+                <Icon icon={Shield} size={16} />
+                <span>{error}</span>
+              </div>
+            )}
+
+            {/* Step 1: Personal Information */}
+            {currentStep === 1 && (
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-foreground">Prénom</label>
+                    <div className="relative">
+                      <Icon icon={User} size={16} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+                      <Input
+                        value={formData.firstName}
+                        onChange={(e) => handleInputChange('firstName', e.target.value)}
+                        placeholder="Jean"
+                        className="pl-12 h-12"
+                        variant="banking"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-foreground">Nom</label>
+                    <div className="relative">
+                      <Icon icon={User} size={16} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+                      <Input
+                        value={formData.lastName}
+                        onChange={(e) => handleInputChange('lastName', e.target.value)}
+                        placeholder="Dupont"
+                        className="pl-12 h-12"
+                        variant="banking"
+                        required
+                      />
+                    </div>
+                  </div>
                 </div>
-              )}
 
-              {step === 1 ? (
-                // Step 1: Personal Information
-                <>
-                  <div className="space-y-2">
-                    <label htmlFor="name" className="text-sm font-medium text-gray-700">
-                      Nom complet
-                    </label>
-                    <div className="relative">
-                      <Icon icon={User} size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                      <Input
-                        id="name"
-                        type="text"
-                        placeholder="Votre nom complet"
-                        value={formData.name}
-                        onChange={(e) => handleInputChange('name', e.target.value)}
-                        className="pl-10"
-                        required
-                      />
-                    </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground">Adresse email</label>
+                  <div className="relative">
+                    <Icon icon={Mail} size={16} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => handleInputChange('email', e.target.value)}
+                      placeholder="jean.dupont@email.com"
+                      className="pl-12 h-12"
+                      variant="banking"
+                      required
+                    />
                   </div>
+                </div>
+              </div>
+            )}
 
-                  <div className="space-y-2">
-                    <label htmlFor="email" className="text-sm font-medium text-gray-700">
-                      Adresse email
-                    </label>
-                    <div className="relative">
-                      <Icon icon={Mail} size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="votre@email.com"
-                        value={formData.email}
-                        onChange={(e) => handleInputChange('email', e.target.value)}
-                        className="pl-10"
-                        required
-                      />
-                    </div>
+            {/* Step 2: Security */}
+            {currentStep === 2 && (
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground">Numéro de téléphone</label>
+                  <div className="relative">
+                    <Icon icon={Smartphone} size={16} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) => handleInputChange('phone', e.target.value)}
+                      placeholder="+33 6 12 34 56 78"
+                      className="pl-12 h-12"
+                      variant="banking"
+                      required
+                    />
                   </div>
+                </div>
 
-                  <Button type="submit" className="w-full" size="lg">
-                    Continuer
-                  </Button>
-                </>
-              ) : (
-                // Step 2: Security
-                <>
-                  <div className="space-y-2">
-                    <label htmlFor="password" className="text-sm font-medium text-gray-700">
-                      Mot de passe
-                    </label>
-                    <div className="relative">
-                      <Icon icon={Lock} size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                      <Input
-                        id="password"
-                        type={showPassword ? 'text' : 'password'}
-                        placeholder="Créez un mot de passe"
-                        value={formData.password}
-                        onChange={(e) => handleInputChange('password', e.target.value)}
-                        className="pl-10 pr-10"
-                        required
-                      />
-                       <button
-                         type="button"
-                         onClick={() => setShowPassword(!showPassword)}
-                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                         aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
-                       >
-                         <Icon icon={showPassword ? EyeOff : Eye} size={16} />
-                       </button>
-                    </div>
-
-                    {/* Password Strength Indicator */}
-                    {formData.password && (
-                      <div className="space-y-2 animate-fade-in">
-                        <div className="flex items-center justify-between text-xs">
-                          <span className="text-gray-400">Force du mot de passe</span>
-                          <span className={`font-medium ${
-                            passwordStrength(formData.password) <= 2 ? 'text-red-600' :
-                            passwordStrength(formData.password) <= 3 ? 'text-yellow-600' : 'text-green-600'
-                          }`}>
-                            {getPasswordStrengthText(passwordStrength(formData.password))}
-                          </span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div
-                            className={`h-2 rounded-full transition-all duration-300 ${getPasswordStrengthColor(passwordStrength(formData.password))}`}
-                            style={{ width: `${(passwordStrength(formData.password) / 5) * 100}%` }}
-                          />
-                        </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground">Mot de passe</label>
+                  <div className="relative">
+                    <Icon icon={Lock} size={16} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                      type={showPassword ? 'text' : 'password'}
+                      value={formData.password}
+                      onChange={(e) => handleInputChange('password', e.target.value)}
+                      placeholder="Minimum 8 caractères"
+                      className="pl-12 pr-12 h-12"
+                      variant="banking"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <Icon icon={showPassword ? EyeOff : Eye} size={16} />
+                    </button>
+                  </div>
+                  {formData.password && (
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-muted-foreground">Force du mot de passe</span>
+                        <span className="font-medium">{strengthLabels[passwordStrength - 1] || 'Très faible'}</span>
                       </div>
-                    )}
-                  </div>
+                      <div className="w-full bg-muted rounded-full h-2">
+                        <div 
+                          className={`h-2 rounded-full transition-all duration-300 ${strengthColors[passwordStrength - 1] || 'bg-destructive'}`}
+                          style={{ width: `${(passwordStrength / 5) * 100}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  )}
+                </div>
 
-                  <div className="space-y-2">
-                    <label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">
-                      Confirmer le mot de passe
-                    </label>
-                    <div className="relative">
-                      <Icon icon={Lock} size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                      <Input
-                        id="confirmPassword"
-                        type={showConfirmPassword ? 'text' : 'password'}
-                        placeholder="Confirmez votre mot de passe"
-                        value={formData.confirmPassword}
-                        onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
-                        className="pl-10 pr-10"
-                        required
-                      />
-                       <button
-                         type="button"
-                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                         aria-label={showConfirmPassword ? "Masquer la confirmation du mot de passe" : "Afficher la confirmation du mot de passe"}
-                       >
-                         <Icon icon={showConfirmPassword ? EyeOff : Eye} size={16} />
-                       </button>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground">Confirmer le mot de passe</label>
+                  <div className="relative">
+                    <Icon icon={Lock} size={16} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      value={formData.confirmPassword}
+                      onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
+                      placeholder="Répétez votre mot de passe"
+                      className="pl-12 pr-12 h-12"
+                      variant="banking"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <Icon icon={showConfirmPassword ? EyeOff : Eye} size={16} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Step 3: Terms and Finalization */}
+            {currentStep === 3 && (
+              <div className="space-y-4">
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-foreground">Récapitulatif</h3>
+                  <div className="bg-muted/50 rounded-xl p-4 space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Nom complet</span>
+                      <span className="font-medium">{formData.firstName} {formData.lastName}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Email</span>
+                      <span className="font-medium">{formData.email}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Téléphone</span>
+                      <span className="font-medium">{formData.phone}</span>
                     </div>
                   </div>
+                </div>
 
-                  <div className="flex items-start space-x-2">
+                <div className="space-y-3">
+                  <label className="flex items-start space-x-3 cursor-pointer">
                     <input
-                      id="acceptTerms"
                       type="checkbox"
                       checked={formData.acceptTerms}
                       onChange={(e) => handleInputChange('acceptTerms', e.target.checked)}
-                      className="mt-1 w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary"
-                      required
+                      className="w-5 h-5 text-primary border-border rounded focus:ring-primary focus:ring-2 mt-0.5"
                     />
-                    <label htmlFor="acceptTerms" className="text-sm text-gray-400">
-                      J&apos;accepte les{' '}
+                    <span className="text-sm text-muted-foreground">
+                      J'accepte les{' '}
                       <Link href="/terms" className="text-primary hover:text-primary/80 underline">
-                        conditions d&apos;utilisation
-                      </Link>
-                      {' '}et la{' '}
+                        conditions d'utilisation
+                      </Link>{' '}
+                      et la{' '}
                       <Link href="/privacy" className="text-primary hover:text-primary/80 underline">
                         politique de confidentialité
-                      </Link>
-                    </label>
-                  </div>
-
-                  <div className="flex space-x-3">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setStep(1)}
-                      className="flex-1"
-                    >
-                      Retour
-                    </Button>
-                    <Button
-                      type="submit"
-                      className="flex-1"
-                      size="lg"
-                      loading={isLoading}
-                    >
-                      {isLoading ? 'Création...' : 'Créer le compte'}
-                    </Button>
-                  </div>
-                </>
-              )}
-            </form>
-
-            {step === 1 && (
-              <div className="mt-6 text-center">
-                <p className="text-sm text-gray-400">
-                  Déjà un compte ?{' '}
-                  <Link
-                    href="/login"
-                    className="font-medium text-primary hover:text-primary/80 transition-colors"
-                  >
-                    Se connecter
-                  </Link>
-                </p>
+                      </Link>{' '}
+                      de VaelixBank
+                    </span>
+                  </label>
+                </div>
               </div>
             )}
+
+            {/* Action Buttons */}
+            <div className="space-y-3">
+              {currentStep < 3 ? (
+                <Button
+                  onClick={handleNext}
+                  className="w-full h-12"
+                  size="lg"
+                  variant="banking"
+                >
+                  <span>Continuer</span>
+                  <Icon icon={ArrowRight} size={16} className="ml-2" />
+                </Button>
+              ) : (
+                <Button
+                  onClick={handleSignup}
+                  className="w-full h-12"
+                  size="lg"
+                  variant="banking"
+                  loading={isLoading}
+                  disabled={!formData.acceptTerms}
+                >
+                  {isLoading ? (
+                    <div className="flex items-center space-x-2">
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <span>Création du compte...</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center space-x-2">
+                      <Icon icon={Shield} size={16} />
+                      <span>Créer mon compte</span>
+                    </div>
+                  )}
+                </Button>
+              )}
+
+              {currentStep > 1 && (
+                <Button
+                  variant="ghost"
+                  onClick={() => setCurrentStep(currentStep - 1)}
+                  className="w-full"
+                >
+                  Retour
+                </Button>
+              )}
+            </div>
+
+            <div className="text-center pt-4 border-t border-border">
+              <p className="text-sm text-muted-foreground">
+                Déjà un compte ?{' '}
+                <Link
+                  href="/login"
+                  className="font-semibold text-primary hover:text-primary/80 transition-colors"
+                >
+                  Se connecter
+                </Link>
+              </p>
+            </div>
           </CardContent>
         </Card>
 
         {/* Footer */}
-        <div className="text-center text-xs text-gray-500 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-          <p>Protégé par un cryptage bancaire de niveau bancaire</p>
-          <p className="mt-1">© 2024 VaelixBank. Tous droits réservés.</p>
+        <div className="text-center text-xs text-muted-foreground animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+          <p className="flex items-center justify-center space-x-1 mb-2">
+            <Icon icon={Shield} size={12} />
+            <span>Protégé par un cryptage bancaire de niveau militaire</span>
+          </p>
+          <p>© 2024 VaelixBank. Tous droits réservés.</p>
         </div>
       </div>
     </div>

@@ -2,27 +2,40 @@
 @import "tailwindcss";
 
 :root {
-  /* Revolut-inspired light theme colors */
-  --background: #ffffff;
-  --foreground: #191c1f;
+  /* VaelixBank modern theme colors */
+  --background: #fafbfc;
+  --foreground: #0f172a;
   --card: #ffffff;
-  --card-foreground: #191c1f;
+  --card-foreground: #0f172a;
   --popover: #ffffff;
-  --popover-foreground: #191c1f;
-  --primary: #00d09c;
+  --popover-foreground: #0f172a;
+  --primary: #3b82f6;
   --primary-foreground: #ffffff;
-  --secondary: #f8f9fa;
-  --secondary-foreground: #191c1f;
-  --muted: #f8f9fa;
-  --muted-foreground: #6c7278;
-  --accent: #f8f9fa;
-  --accent-foreground: #191c1f;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f8fafc;
+  --muted-foreground: #64748b;
+  --accent: #f1f5f9;
+  --accent-foreground: #0f172a;
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
-  --border: #e5e7eb;
+  --success: #10b981;
+  --success-foreground: #ffffff;
+  --warning: #f59e0b;
+  --warning-foreground: #ffffff;
+  --border: #e2e8f0;
   --input: #ffffff;
-  --ring: #00d09c;
-  --radius: 1rem;
+  --ring: #3b82f6;
+  --radius: 0.75rem;
+  
+  /* Banking specific colors */
+  --bank-primary: #2563eb;
+  --bank-secondary: #1e40af;
+  --bank-accent: #06b6d4;
+  --bank-success: #059669;
+  --bank-warning: #d97706;
+  --bank-danger: #dc2626;
+  --bank-info: #0284c7;
 
   /* Shadows - Revolut style subtle shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -34,25 +47,38 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0f1419;
-    --foreground: #ffffff;
-    --card: #1a2026;
-    --card-foreground: #ffffff;
-    --popover: #1a2026;
-    --popover-foreground: #ffffff;
-    --primary: #00d09c;
-    --primary-foreground: #0f1419;
-    --secondary: #1a2026;
-    --secondary-foreground: #ffffff;
-    --muted: #1a2026;
+    --background: #0f172a;
+    --foreground: #f8fafc;
+    --card: #1e293b;
+    --card-foreground: #f8fafc;
+    --popover: #1e293b;
+    --popover-foreground: #f8fafc;
+    --primary: #3b82f6;
+    --primary-foreground: #ffffff;
+    --secondary: #334155;
+    --secondary-foreground: #f8fafc;
+    --muted: #1e293b;
     --muted-foreground: #94a3b8;
-    --accent: #1a2026;
-    --accent-foreground: #ffffff;
+    --accent: #334155;
+    --accent-foreground: #f8fafc;
     --destructive: #ef4444;
     --destructive-foreground: #ffffff;
+    --success: #10b981;
+    --success-foreground: #ffffff;
+    --warning: #f59e0b;
+    --warning-foreground: #ffffff;
     --border: #334155;
-    --input: #1a2026;
-    --ring: #00d09c;
+    --input: #1e293b;
+    --ring: #3b82f6;
+    
+    /* Banking specific colors - dark mode */
+    --bank-primary: #60a5fa;
+    --bank-secondary: #3b82f6;
+    --bank-accent: #22d3ee;
+    --bank-success: #34d399;
+    --bank-warning: #fbbf24;
+    --bank-danger: #f87171;
+    --bank-info: #38bdf8;
 
     /* Shadows */
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);

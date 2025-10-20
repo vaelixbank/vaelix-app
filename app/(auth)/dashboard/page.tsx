@@ -1,138 +1,254 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useStore } from '../../lib/store';
-import { Card, CardContent } from '../../components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
+import { BalanceCard } from '../../components/ui/balance-card';
+import { TransactionItem } from '../../components/ui/transaction-item';
+import { QuickAction } from '../../components/ui/quick-action';
+import { Badge } from '../../components/ui/badge';
 import { Icon } from '../../../lib/icon';
 import {
   ArrowUpRight,
   ArrowDownLeft,
   TrendingUp,
   CreditCard,
-  Eye
+  Eye,
+  EyeOff,
+  Wallet,
+  PieChart,
+  TrendingDown,
+  Plus,
+  MoreHorizontal
 } from 'lucide-react';
 
 export default function Dashboard() {
-  const { user, transactions, getTotalBalance } = useStore();
+  const router = useRouter();
+  const [showBalance, setShowBalance] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  const { 
+    user, 
+    accounts, 
+    transactions, 
+    quickActions,
+    getTotalBalance, 
+    getMonthlyIncome, 
+    getMonthlyExpenses,
+    getSavingsRate,
+    setLoading,
+    isAuthenticated
+  } = useStore();
 
   useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      // For now, we'll use the store's default user
-      // setUser(JSON.parse(userData));
-    } else {
-      window.location.href = '/login';
-    }
-  }, []);
+    // Simulate loading
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+      setLoading(false);
+    }, 1000);
 
-  if (!user) return (
-    <div className="min-h-screen bg-background flex items-center justify-center">
-      <div className="animate-pulse">
-        <div className="w-12 h-12 bg-primary rounded-full"></div>
+    if (!isAuthenticated) {
+      router.push('/login');
+    }
+
+    return () => clearTimeout(timer);
+  }, [isAuthenticated, router, setLoading]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto animate-pulse">
+            <Icon icon={Wallet} size={32} className="text-primary" />
+          </div>
+          <div className="space-y-2">
+            <div className="h-4 bg-muted rounded w-32 mx-auto animate-pulse"></div>
+            <div className="h-3 bg-muted rounded w-24 mx-auto animate-pulse"></div>
+          </div>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  if (!user || !isAuthenticated) {
+    return null;
+  }
 
   const totalBalance = getTotalBalance();
+  const monthlyIncome = getMonthlyIncome();
+  const monthlyExpenses = getMonthlyExpenses();
+  const savingsRate = getSavingsRate();
+  const recentTransactions = transactions.slice(0, 5);
 
-  const quickActions = [
-    {
-      title: 'Send',
-      href: '/send',
-      icon: ArrowUpRight,
-    },
-    {
-      title: 'Request',
-      href: '/request',
-      icon: ArrowDownLeft,
-    },
-    {
-      title: 'Top up',
-      href: '/topup',
-      icon: TrendingUp,
-    },
-    {
-      title: 'Cards',
-      href: '/cards',
-      icon: CreditCard,
-    },
-  ];
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Bonjour';
+    if (hour < 18) return 'Bon après-midi';
+    return 'Bonsoir';
+  };
+
+  const getAccountIcon = (type: string) => {
+    switch (type) {
+      case 'checking':
+        return Wallet;
+      case 'savings':
+        return TrendingUp;
+      case 'investment':
+        return PieChart;
+      default:
+        return Wallet;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-md mx-auto px-4 py-4">
-        {/* Welcome Message */}
-        <div className="mb-8">
-          <h1 className="text-2xl font-semibold text-foreground">
-            Good morning, {user.name?.split(' ')[0] || 'User'}
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Here&apos;s your financial overview
-          </p>
+      <div className="max-w-md mx-auto px-4 py-6 space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">
+              {getGreeting()}, {user.name?.split(' ')[0] || 'User'} 👋
+            </h1>
+            <p className="text-muted-foreground text-sm mt-1">
+              Voici un aperçu de vos finances
+            </p>
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setShowBalance(!showBalance)}
+            className="rounded-full"
+          >
+            <Icon icon={showBalance ? EyeOff : Eye} size={20} />
+          </Button>
         </div>
 
-        {/* Total Balance */}
-        <div className="mb-8 animate-fade-in">
-          <p className="text-sm text-muted-foreground font-medium">Total balance</p>
-          <p className="text-3xl font-bold text-foreground">
-            €{totalBalance.toLocaleString('fr-FR', { minimumFractionDigits: 2 })}
-          </p>
+        {/* Total Balance Card */}
+        <BalanceCard
+          title="Solde total"
+          amount={totalBalance}
+          currency="€"
+          change={savingsRate > 0 ? savingsRate : -5.2}
+          changeType={savingsRate > 0 ? 'positive' : 'negative'}
+          showBalance={showBalance}
+          onToggleBalance={() => setShowBalance(!showBalance)}
+          variant="primary"
+          icon={Wallet}
+          className="animate-fade-in"
+        />
+
+        {/* Quick Stats */}
+        <div className="grid grid-cols-2 gap-4 animate-fade-in" style={{ animationDelay: '0.1s' }}>
+          <Card variant="gradient" className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground font-medium">Revenus</p>
+                <p className="text-lg font-bold text-foreground">
+                  {showBalance ? `€${monthlyIncome.toLocaleString('fr-FR')}` : '••••'}
+                </p>
+              </div>
+              <div className="w-8 h-8 bg-success/10 rounded-lg flex items-center justify-center">
+                <Icon icon={TrendingUp} size={16} className="text-success" />
+              </div>
+            </div>
+          </Card>
+
+          <Card variant="gradient" className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground font-medium">Dépenses</p>
+                <p className="text-lg font-bold text-foreground">
+                  {showBalance ? `€${monthlyExpenses.toLocaleString('fr-FR')}` : '••••'}
+                </p>
+              </div>
+              <div className="w-8 h-8 bg-destructive/10 rounded-lg flex items-center justify-center">
+                <Icon icon={TrendingDown} size={16} className="text-destructive" />
+              </div>
+            </div>
+          </Card>
         </div>
 
         {/* Accounts */}
-        <div className="mb-6 animate-fade-in" style={{ animationDelay: '0.1s' }}>
-          <h2 className="text-lg font-semibold text-foreground mb-3">Your accounts</h2>
+        <div className="space-y-4 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-foreground">Mes comptes</h2>
+            <Button variant="ghost" size="sm" className="text-primary">
+              <Icon icon={Plus} size={16} className="mr-1" />
+              Ajouter
+            </Button>
+          </div>
+          
           <div className="space-y-3">
-            {user.accounts.map((account, index) => (
-              <Card key={account.id} className="bg-card border border-border shadow-sm hover:shadow-md transition-all duration-300 animate-slide-in-left" style={{ animationDelay: `${0.2 + index * 0.1}s` }}>
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div
-                        className="w-10 h-10 rounded-full flex items-center justify-center"
-                        style={{ backgroundColor: `${account.color}20` }}
-                      >
+            {accounts.map((account, index) => {
+              const AccountIcon = getAccountIcon(account.type);
+              return (
+                <Card 
+                  key={account.id} 
+                  variant="banking"
+                  className="animate-slide-in-left" 
+                  style={{ animationDelay: `${0.3 + index * 0.1}s` }}
+                >
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
                         <div
-                          className="w-4 h-4 rounded-full"
-                          style={{ backgroundColor: account.color }}
-                        />
+                          className="w-12 h-12 rounded-xl flex items-center justify-center"
+                          style={{ backgroundColor: `${account.color}20` }}
+                        >
+                          <AccountIcon 
+                            size={20} 
+                            style={{ color: account.color }}
+                          />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="font-semibold text-card-foreground">{account.name}</p>
+                          <p className="text-xs text-muted-foreground capitalize">
+                            {account.type === 'checking' ? 'Compte courant' : 
+                             account.type === 'savings' ? 'Épargne' :
+                             account.type === 'investment' ? 'Investissement' : account.type}
+                          </p>
+                          {account.iban && (
+                            <p className="text-xs text-muted-foreground font-mono">
+                              {account.iban.slice(-4).padStart(4, '•')}
+                            </p>
+                          )}
+                        </div>
                       </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="font-medium text-card-foreground">{account.name}</p>
-                        <p className="text-xs text-muted-foreground capitalize">{account.type}</p>
+                      <div className="text-right">
+                        <p className="text-lg font-bold text-card-foreground">
+                          {showBalance ? `€${account.balance.toLocaleString('fr-FR', { minimumFractionDigits: 2 })}` : '••••••'}
+                        </p>
+                        <Badge variant="outline" size="sm" className="mt-1">
+                          {account.isActive ? 'Actif' : 'Inactif'}
+                        </Badge>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-lg font-bold text-card-foreground">
-                        €{account.balance.toLocaleString('fr-FR', { minimumFractionDigits: 2 })}
-                      </p>
-                      <Icon icon={Eye} size={14} className="text-muted-foreground ml-auto mt-1" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </div>
 
         {/* Quick Actions */}
-        <div className="mb-6 animate-fade-in" style={{ animationDelay: '0.3s' }}>
-          <h2 className="text-lg font-semibold text-foreground mb-3">Quick actions</h2>
-          <div className="grid grid-cols-4 gap-3">
-            {quickActions.slice(0, 4).map((action, index) => {
-              const IconComponent = action.icon;
+        <div className="space-y-4 animate-fade-in" style={{ animationDelay: '0.4s' }}>
+          <h2 className="text-lg font-semibold text-foreground">Actions rapides</h2>
+          <div className="grid grid-cols-2 gap-3">
+            {quickActions.filter(action => action.isEnabled).map((action, index) => {
+              const IconComponent = require('lucide-react')[action.icon];
               return (
-                <Link key={action.title} href={action.href}>
-                  <Card className="hover:shadow-md transition-shadow cursor-pointer">
-                    <CardContent className="p-4 text-center">
-                      <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-                        <Icon icon={IconComponent} size={24} className="text-primary" />
-                      </div>
-                      <h3 className="font-medium text-card-foreground text-sm">{action.title}</h3>
-                    </CardContent>
-                  </Card>
+                <Link key={action.id} href={action.href}>
+                  <QuickAction
+                    title={action.title}
+                    description={action.description}
+                    icon={IconComponent}
+                    variant={action.variant as any}
+                    className="animate-slide-in-up"
+                    style={{ animationDelay: `${0.5 + index * 0.1}s` }}
+                  />
                 </Link>
               );
             })}
@@ -140,46 +256,42 @@ export default function Dashboard() {
         </div>
 
         {/* Recent Transactions */}
-        <div className="mb-6 animate-fade-in" style={{ animationDelay: '0.4s' }}>
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-lg font-semibold text-foreground">Recent transactions</h2>
-            <Button variant="ghost" size="sm" className="text-primary h-8 px-2" onClick={() => window.location.href = '/transactions'}>
-              View all
+        <div className="space-y-4 animate-fade-in" style={{ animationDelay: '0.6s' }}>
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-foreground">Transactions récentes</h2>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="text-primary"
+              onClick={() => router.push('/transactions')}
+            >
+              Voir tout
+              <Icon icon={MoreHorizontal} size={16} className="ml-1" />
             </Button>
           </div>
-          <Card className="border border-border">
-            <CardContent className="p-0">
-              <div className="divide-y divide-border">
-                {transactions.slice(0, 4).map((transaction) => (
-                  <div key={transaction.id} className="flex items-center justify-between p-3 hover:bg-muted/50 cursor-pointer transition-colors">
-                    <div className="flex items-center space-x-2.5">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                        transaction.amount > 0 ? 'bg-green-50' : 'bg-red-50'
-                      }`}>
-                        <span className={`text-xs font-medium ${
-                          transaction.amount > 0 ? 'text-green-600' : 'text-red-600'
-                        }`}>
-                          {transaction.description.charAt(0).toUpperCase()}
-                        </span>
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="font-medium text-card-foreground text-sm truncate">{transaction.description}</p>
-                        <p className="text-xs text-muted-foreground">{transaction.date}</p>
-                      </div>
-                    </div>
-                    <div className="text-right flex-shrink-0">
-                      <p className={`font-semibold text-sm ${
-                        transaction.amount > 0 ? 'text-green-600' : 'text-red-600'
-                      }`}>
-                        {transaction.amount > 0 ? '+' : ''}€{Math.abs(transaction.amount)}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          
+          <div className="space-y-3">
+            {recentTransactions.map((transaction, index) => (
+              <TransactionItem
+                key={transaction.id}
+                id={transaction.id}
+                amount={transaction.amount}
+                description={transaction.description}
+                date={transaction.date}
+                category={transaction.category}
+                type={transaction.type}
+                status={transaction.status}
+                merchant={transaction.merchant}
+                className="animate-slide-in-up"
+                style={{ animationDelay: `${0.7 + index * 0.1}s` }}
+                onPress={() => router.push('/transactions')}
+              />
+            ))}
+          </div>
         </div>
+
+        {/* Bottom Spacing for Mobile Navigation */}
+        <div className="h-20" />
       </div>
     </div>
   );

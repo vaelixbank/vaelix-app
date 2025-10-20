@@ -1,44 +1,44 @@
 import { forwardRef } from 'react';
+import { cn } from '../../lib/utils';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link' | 'success' | 'warning';
+  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link' | 'success' | 'warning' | 'banking';
   size?: 'default' | 'sm' | 'lg' | 'xl' | 'icon';
   loading?: boolean;
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = 'default', size = 'default', loading = false, disabled, children, ...props }, ref) => {
-    const baseClasses = 'inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50';
+    const baseClasses = 'inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-95';
 
     const variantClasses = {
-      default: 'bg-primary text-white hover:bg-primary/90 shadow-sm',
-      destructive: 'bg-red-600 text-white hover:bg-red-700 shadow-sm',
-      outline: 'border border-gray-600 bg-gray-800 hover:bg-gray-700 text-gray-100 shadow-sm',
-      secondary: 'bg-gray-700 text-gray-100 hover:bg-gray-600 shadow-sm',
-      ghost: 'hover:bg-gray-800 text-gray-300',
+      default: 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-md hover:shadow-lg',
+      destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-md hover:shadow-lg',
+      outline: 'border-2 border-border bg-background hover:bg-accent hover:text-accent-foreground shadow-sm',
+      secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm',
+      ghost: 'hover:bg-accent hover:text-accent-foreground',
       link: 'text-primary underline-offset-4 hover:underline p-0 h-auto',
-      success: 'bg-green-600 text-white hover:bg-green-700 shadow-sm',
-      warning: 'bg-yellow-600 text-white hover:bg-yellow-700 shadow-sm',
+      success: 'bg-success text-success-foreground hover:bg-success/90 shadow-md hover:shadow-lg',
+      warning: 'bg-warning text-warning-foreground hover:bg-warning/90 shadow-md hover:shadow-lg',
+      banking: 'bg-gradient-to-r from-bank-primary to-bank-secondary text-white hover:from-bank-secondary hover:to-bank-primary shadow-lg hover:shadow-xl',
     };
 
     const sizeClasses = {
-      default: 'h-10 px-4 py-2',
-      sm: 'h-9 rounded-md px-3 text-sm',
-      lg: 'h-11 rounded-md px-8',
-      xl: 'h-12 rounded-lg px-10 text-base',
-      icon: 'h-10 w-10 p-0',
+      default: 'h-11 px-6 py-2.5',
+      sm: 'h-9 px-4 text-sm',
+      lg: 'h-12 px-8 text-base',
+      xl: 'h-14 px-10 text-lg',
+      icon: 'h-11 w-11 p-0',
     };
-
-    const combinedClasses = [
-      baseClasses,
-      variantClasses[variant],
-      sizeClasses[size],
-      className
-    ].filter(Boolean).join(' ');
 
     return (
       <button
-        className={combinedClasses}
+        className={cn(
+          baseClasses,
+          variantClasses[variant],
+          sizeClasses[size],
+          className
+        )}
         ref={ref}
         disabled={disabled || loading}
         {...props}

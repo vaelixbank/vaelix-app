@@ -1,8 +1,9 @@
 import { forwardRef } from 'react';
+import { cn } from '../../lib/utils';
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: 'default' | 'secondary' | 'destructive' | 'outline' | 'success' | 'warning';
-  size?: 'default' | 'sm' | 'lg';
+  variant?: 'default' | 'secondary' | 'destructive' | 'success' | 'warning' | 'outline' | 'banking';
+  size?: 'sm' | 'default' | 'lg';
 }
 
 const Badge = forwardRef<HTMLDivElement, BadgeProps>(
@@ -12,29 +13,28 @@ const Badge = forwardRef<HTMLDivElement, BadgeProps>(
     const variantClasses = {
       default: 'bg-primary text-primary-foreground hover:bg-primary/80',
       secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-      destructive: 'bg-red-100 text-red-800 hover:bg-red-200',
-      outline: 'border border-gray-300 bg-white text-gray-900 hover:bg-gray-50',
-      success: 'bg-green-100 text-green-800 hover:bg-green-200',
-      warning: 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200',
+      destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/80',
+      success: 'bg-success text-success-foreground hover:bg-success/80',
+      warning: 'bg-warning text-warning-foreground hover:bg-warning/80',
+      outline: 'text-foreground border border-border',
+      banking: 'bg-gradient-to-r from-bank-primary to-bank-secondary text-white',
     };
 
     const sizeClasses = {
+      sm: 'px-2 py-1 text-xs',
       default: 'px-2.5 py-0.5 text-xs',
-      sm: 'px-2 py-0.5 text-xs',
       lg: 'px-3 py-1 text-sm',
     };
-
-    const combinedClasses = [
-      baseClasses,
-      variantClasses[variant],
-      sizeClasses[size],
-      className
-    ].filter(Boolean).join(' ');
 
     return (
       <div
         ref={ref}
-        className={combinedClasses}
+        className={cn(
+          baseClasses,
+          variantClasses[variant],
+          sizeClasses[size],
+          className
+        )}
         {...props}
       />
     );
