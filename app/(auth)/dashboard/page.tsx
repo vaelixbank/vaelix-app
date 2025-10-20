@@ -12,18 +12,13 @@ import {
   Plus,
   ArrowUpDown,
   Building2,
-  MoreHorizontal,
-  X,
-  ChevronUp,
-  Gift,
-  Heart
+  MoreHorizontal
 } from 'lucide-react';
 
 export default function Dashboard() {
   const router = useRouter();
   const [showBalance, setShowBalance] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
-  const [showPromo, setShowPromo] = useState(true);
   
   const { 
     user, 
@@ -57,21 +52,12 @@ export default function Dashboard() {
   const lastDayOfMonth = useMemo(() => new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate(), []);
   const monthProgressPercent = Math.min(100, Math.max(0, Math.round((dayOfMonth / lastDayOfMonth) * 100)));
 
-  const getCurrentTime = useCallback(() => {
-    return new Date().toLocaleTimeString('fr-FR', { 
-      hour: '2-digit', 
-      minute: '2-digit' 
-    });
-  }, []);
 
   // Memoized handlers
   const handleToggleBalance = useCallback(() => {
     setShowBalance(!showBalance);
   }, [showBalance]);
 
-  const handleClosePromo = useCallback(() => {
-    setShowPromo(false);
-  }, []);
 
   const handleTransactionClick = useCallback(() => {
     router.push('/transactions');
@@ -122,10 +108,16 @@ export default function Dashboard() {
           
           {/* Right Icons */}
           <div className="flex items-center space-x-2">
-            <button className="p-2 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 transition-colors">
+            <button 
+              onClick={() => router.push('/analytics')}
+              className="p-2 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 transition-colors"
+            >
               <Icon icon={BarChart3} size={18} className="text-slate-300" />
             </button>
-            <button className="p-2 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 transition-colors">
+            <button 
+              onClick={() => router.push('/cards')}
+              className="p-2 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 transition-colors"
+            >
               <Icon icon={CreditCard} size={18} className="text-slate-300" />
             </button>
           </div>
@@ -182,34 +174,6 @@ export default function Dashboard() {
             <span className="text-xs text-slate-400 text-center">Plus</span>
           </div>
         </div>
-
-        {/* Promotional Banner - Exact Revolut style */}
-        {showPromo && (
-          <div className="relative bg-slate-800/50 rounded-2xl p-4 border border-slate-700">
-            <button 
-              onClick={handleClosePromo}
-              className="absolute top-3 right-3 p-1 hover:bg-slate-700/50 rounded-full transition-colors"
-            >
-              <Icon icon={X} size={16} className="text-slate-400" />
-            </button>
-            
-            <div className="flex items-center space-x-4">
-              <div className="flex-1">
-                <h3 className="text-white font-bold text-lg mb-1">Ami invité = 70 € gagnés</h3>
-                <p className="text-slate-400 text-sm">70 € par ami inscrit avant le 21 octobre. Voir CG.</p>
-              </div>
-              
-              <div className="relative">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                  <Icon icon={Gift} size={24} className="text-white" />
-                </div>
-                <div className="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                  <Icon icon={Heart} size={12} className="text-white" />
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Transactions List - Microsoft style */}
         <div className="space-y-3">

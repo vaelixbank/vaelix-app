@@ -33,6 +33,7 @@ export interface TransactionItemProps extends React.HTMLAttributes<HTMLDivElemen
 
 const TransactionItem = forwardRef<HTMLDivElement, TransactionItemProps>(
   ({ 
+    id,
     className, 
     amount, 
     description, 
@@ -190,7 +191,7 @@ const TransactionItem = forwardRef<HTMLDivElement, TransactionItemProps>(
               {showDetails && (
                 <div className="mt-3 pt-3 border-t border-gray-200">
                   <div className="flex items-center justify-between text-xs text-gray-500">
-                    <span>ID: {props.id?.slice(-8)}</span>
+                    <span>ID: {id?.slice(-8)}</span>
                     <button className="p-1 rounded-lg hover:bg-gray-100 transition-colors">
                       <Icon icon={MoreHorizontal} size={14} />
                     </button>
@@ -263,7 +264,7 @@ const TransactionItem = forwardRef<HTMLDivElement, TransactionItemProps>(
                     {isIncome ? '+' : ''}€{formatAmount(amount)}
                   </div>
                   <Badge 
-                    variant={getStatusColor(status) as any} 
+                    variant={getStatusColor(status) as 'default' | 'secondary' | 'destructive' | 'outline' | 'success'} 
                     size="sm"
                   >
                     {status}
@@ -275,7 +276,7 @@ const TransactionItem = forwardRef<HTMLDivElement, TransactionItemProps>(
               {showDetails && (
                 <div className="mt-3 pt-3 border-t border-border">
                   <div className="flex items-center justify-between text-xs text-muted-foreground">
-                    <span>Transaction ID: {props.id?.slice(-8)}</span>
+                    <span>Transaction ID: {id?.slice(-8)}</span>
                     <button className="p-1 rounded hover:bg-muted/50 transition-colors">
                       <Icon icon={MoreHorizontal} size={14} />
                     </button>

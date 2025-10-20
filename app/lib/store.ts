@@ -40,7 +40,7 @@ export interface Transaction {
   merchant?: string;
   accountId: string;
   recipientId?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface WalletCard {
@@ -171,7 +171,41 @@ export const useStore = create<AppState>()(
         createdAt: '2024-01-01T00:00:00Z'
       },
       isAuthenticated: true,
-      accounts: [],
+      accounts: [
+        {
+          id: '1',
+          name: 'Compte Principal',
+          type: 'checking',
+          balance: 2450.50,
+          currency: 'EUR',
+          color: '#3b82f6',
+          iban: 'FR76 1234 5678 9012 3456 7890 123',
+          isActive: true,
+          createdAt: '2024-01-01T00:00:00Z'
+        },
+        {
+          id: '2',
+          name: 'Épargne',
+          type: 'savings',
+          balance: 5200.00,
+          currency: 'EUR',
+          color: '#10b981',
+          iban: 'FR76 1234 5678 9012 3456 7890 124',
+          isActive: true,
+          createdAt: '2024-01-01T00:00:00Z'
+        },
+        {
+          id: '3',
+          name: 'Investissement',
+          type: 'investment',
+          balance: 12800.75,
+          currency: 'EUR',
+          color: '#f59e0b',
+          iban: 'FR76 1234 5678 9012 3456 7890 125',
+          isActive: true,
+          createdAt: '2024-01-01T00:00:00Z'
+        }
+      ],
       transactions: [
         { 
           id: '1', 

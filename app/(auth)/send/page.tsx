@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useStore } from '../../lib/store';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
@@ -11,6 +12,7 @@ import { Input } from '../../components/ui/input';
 
 
 export default function Send() {
+  const router = useRouter();
   const [amount, setAmount] = useState('');
   const [recipient, setRecipient] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('bank');
@@ -45,10 +47,13 @@ export default function Send() {
       amount: -parseFloat(amount),
       description: `Sent to ${recipient}`,
       date: new Date().toISOString().split('T')[0],
+      type: 'expense' as const,
+      status: 'completed' as const,
+      accountId: '1',
     };
     addTransaction(transaction);
     alert(`Sent $${amount} to ${recipient}`);
-    window.location.href = '/dashboard';
+    router.push('/dashboard');
   };
 
   const handleApplePay = async () => {
@@ -86,12 +91,15 @@ export default function Send() {
           amount: -parseFloat(amount),
           description: `Apple Pay: Sent to ${recipient}`,
           date: new Date().toISOString().split('T')[0],
+          type: 'expense' as const,
+          status: 'completed' as const,
+          accountId: '1',
         };
         addTransaction(transaction);
 
         session.completePayment((window as any).ApplePaySession.STATUS_SUCCESS);
         alert(`Sent $${amount} to ${recipient} via Apple Pay`);
-        window.location.href = '/dashboard';
+        router.push('/dashboard');
       };
 
       session.begin();
@@ -147,11 +155,14 @@ export default function Send() {
         amount: -parseFloat(amount),
         description: `Google Pay: Sent to ${recipient}`,
         date: new Date().toISOString().split('T')[0],
+        type: 'expense' as const,
+        status: 'completed' as const,
+        accountId: '1',
       };
       addTransaction(transaction);
 
       alert(`Sent $${amount} to ${recipient} via Google Pay`);
-      window.location.href = '/dashboard';
+      router.push('/dashboard');
     } catch (error) {
       console.error('Google Pay error:', error);
       alert('Google Pay payment failed');

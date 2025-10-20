@@ -164,7 +164,7 @@ export default function Analytics() {
               </Badge>
             </div>
             <div>
-              <p className="text-xs text-muted-foreground font-medium">Taux d'épargne</p>
+              <p className="text-xs text-muted-foreground font-medium">Taux d&apos;épargne</p>
               <p className="text-lg font-bold text-foreground">{savingsRate.toFixed(1)}%</p>
             </div>
           </Card>
@@ -298,7 +298,7 @@ export default function Analytics() {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium">Épargne d'urgence</p>
+                  <p className="text-sm font-medium">Épargne d&apos;urgence</p>
                   <p className="text-xs text-muted-foreground">Objectif: €5,000</p>
                 </div>
                 <div className="text-right">

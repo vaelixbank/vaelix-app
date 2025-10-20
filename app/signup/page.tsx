@@ -339,9 +339,9 @@ export default function Signup() {
                       className="w-5 h-5 text-primary border-border rounded focus:ring-primary focus:ring-2 mt-0.5"
                     />
                     <span className="text-sm text-muted-foreground">
-                      J'accepte les{' '}
+                      J&apos;accepte les{' '}
                       <Link href="/terms" className="text-primary hover:text-primary/80 underline">
-                        conditions d'utilisation
+                        conditions d&apos;utilisation
                       </Link>{' '}
                       et la{' '}
                       <Link href="/privacy" className="text-primary hover:text-primary/80 underline">
