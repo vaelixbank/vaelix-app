@@ -10,7 +10,7 @@ const menuItems = [
   { name: 'Invest', href: '/invest', icon: BarChart3, label: 'Investir' },
   { name: 'Transfer', href: '/send', icon: ArrowUpDown, label: 'Virements' },
   { name: 'Crypto', href: '/cryptos', icon: Coins, label: 'Cryptos' },
-  { name: 'Points', href: '/account', icon: Star, label: 'RevPoints' },
+  { name: 'Points', href: '/account', icon: Star, label: 'Accounts' },
 ];
 
 export default function BottomNav() {
@@ -56,7 +56,7 @@ export default function BottomNav() {
       </div>
 
       {/* Safe area padding for devices with home indicator */}
-      <div className="h-safe-area-inset-bottom" />
+      <div className="h-2" />
     </nav>
   );
 }

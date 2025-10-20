@@ -27,12 +27,12 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-40 lg:flex lg:w-64 lg:flex-col">
+    <aside className="lg:sticky lg:top-0 lg:z-40 lg:flex lg:w-64 lg:flex-col lg:h-full lg:overflow-y-auto">
       {/* Sidebar backdrop for mobile (hidden on desktop) */}
       <div className="fixed inset-0 z-40 hidden bg-gray-600 bg-opacity-75 lg:hidden" />
 
       {/* Sidebar content */}
-      <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 border-r border-gray-700 px-6 pb-4 shadow-lg">
+      <div className="flex flex-col gap-y-5 bg-gray-900 border-r border-gray-700 px-6 py-4 shadow-lg h-full">
         {/* Logo */}
         <div className="flex h-16 shrink-0 items-center border-b border-gray-700">
           <div className="flex items-center space-x-3">

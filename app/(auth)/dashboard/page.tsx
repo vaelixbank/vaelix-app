@@ -28,7 +28,9 @@ export default function Dashboard() {
   const { 
     user, 
     transactions, 
+    accounts,
     getTotalBalance, 
+    getMonthlyExpenses,
     setLoading,
     isAuthenticated
   } = useStore();
@@ -50,6 +52,10 @@ export default function Dashboard() {
   // Memoized values for performance - moved before early returns
   const totalBalance = useMemo(() => getTotalBalance(), [getTotalBalance]);
   const recentTransactions = useMemo(() => transactions.slice(0, 3), [transactions]);
+  const monthlyExpenses = useMemo(() => getMonthlyExpenses(), [getMonthlyExpenses]);
+  const dayOfMonth = useMemo(() => new Date().getDate(), []);
+  const lastDayOfMonth = useMemo(() => new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate(), []);
+  const monthProgressPercent = Math.min(100, Math.max(0, Math.round((dayOfMonth / lastDayOfMonth) * 100)));
 
   const getCurrentTime = useCallback(() => {
     return new Date().toLocaleTimeString('fr-FR', { 
@@ -89,7 +95,7 @@ export default function Dashboard() {
         <div className="absolute top-1/2 left-0 w-64 h-64 bg-gradient-to-r from-purple-500/5 to-transparent rounded-full"></div>
       </div>
 
-      <div className="relative z-10 max-w-md mx-auto px-4 py-4 space-y-6">
+      <div className="relative z-10 max-w-md mx-auto lg:max-w-4xl px-4 py-4 space-y-6">
         {/* Header - Exact Revolut style */}
         <div className="flex items-center justify-between pt-2">
           {/* Left: Time + Arrow */}
@@ -251,8 +257,95 @@ export default function Dashboard() {
           ))}
         </div>
 
-        {/* Bottom Spacing for Mobile Navigation */}
-        <div className="h-20" />
+        {/* Desktop Grid Layout */}
+        <div className="lg:grid lg:grid-cols-2 lg:gap-6 space-y-6 lg:space-y-0">
+          {/* Cartes */}
+          <section className="bg-slate-800/60 border border-slate-700 rounded-2xl p-4">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-white font-semibold">Cartes</h2>
+              <span className="text-slate-400 text-sm">›</span>
+            </div>
+            <div className="flex space-x-4 overflow-x-auto pb-2">
+              {accounts.slice(0, 3).map((account) => (
+                <div key={account.id} className="min-w-[180px] h-28 rounded-xl p-4 bg-gradient-to-br from-slate-700 to-slate-900 border border-slate-700 flex flex-col justify-between">
+                  <div className="flex items-center justify-between">
+                    <div className="h-6 w-10 rounded bg-white/20" />
+                    <div className="h-6 w-10 rounded bg-white/20" />
+                  </div>
+                  <div>
+                    <p className="text-slate-300 text-xs mb-1">{account.name}</p>
+                    <p className="text-white font-semibold tracking-wider">•••• {account.iban ? account.iban.slice(-4) : '0000'}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-2 flex justify-center space-x-1">
+              <span className="w-2 h-2 rounded-full bg-white" />
+              <span className="w-2 h-2 rounded-full bg-slate-500" />
+            </div>
+          </section>
+
+          {/* Dépensés ce mois-ci */}
+          <section className="bg-slate-800/60 border border-slate-700 rounded-2xl p-4">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-slate-300 text-sm">Dépensés ce mois-ci</h2>
+              <span className="text-slate-300 text-sm">0 €</span>
+            </div>
+            <div className="text-white text-5xl font-bold mb-6">{monthlyExpenses.toFixed(0)} €</div>
+            <div className="h-1.5 w-full bg-slate-700 rounded-full overflow-hidden">
+              <div className="h-full bg-white" style={{ width: `${monthProgressPercent}%` }} />
+            </div>
+            <div className="mt-3 flex justify-between text-slate-400 text-xs">
+              <span>1</span>
+              <span>6</span>
+              <span>11</span>
+              <span>16</span>
+              <span>21</span>
+              <span>26</span>
+              <span>{lastDayOfMonth}</span>
+            </div>
+          </section>
+        </div>
+
+        {/* Liste de surveillance - Full width */}
+        <section className="bg-slate-800/60 border border-slate-700 rounded-2xl p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-slate-300">Liste de surveillance</h2>
+            <span className="text-slate-400">›</span>
+          </div>
+          <div className="space-y-4">
+            {[
+              { name: 'DogeCoin', symbol: 'DOGE', pair: 'DOGE à EUR', price: '0,17 €', change: '+ 2,19 %', color: 'bg-yellow-400' }, 
+              { name: 'Bitcoin', symbol: 'BTC', pair: 'BTC à EUR', price: '95 361 €', change: '+ 1,79 %', color: 'bg-orange-500' }
+            ].map((c) => (
+              <div key={c.symbol} className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className={`h-10 w-10 rounded-full ${c.color} flex items-center justify-center text-white font-bold`}>
+                    {c.symbol[0]}
+                  </div>
+                  <div>
+                    <p className="text-white font-medium">{c.name}</p>
+                    <p className="text-slate-400 text-sm">{c.pair}</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-white font-semibold">{c.price}</p>
+                  <p className="text-green-400 text-sm">{c.change}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Ajouter des widgets */}
+        <div className="flex justify-center pb-6">
+          <button className="px-4 py-3 bg-slate-800/60 border border-slate-700 text-white rounded-full text-sm">
+            + Ajouter des widgets
+          </button>
+        </div>
+
+        {/* Bottom Spacing for Mobile Navigation - Only on mobile */}
+        <div className="h-8 lg:hidden" />
       </div>
     </div>
   );
