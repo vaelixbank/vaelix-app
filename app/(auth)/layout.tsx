@@ -1,15 +1,16 @@
+"use client";
+
 import BottomNav from '../components/ui/bottom-nav';
-import TopHeader from '../components/ui/top-header';
+import { usePathname } from 'next/navigation';
 
 export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
   return (
     <div className="min-h-screen bg-background">
-      {/* Mobile Header */}
-      <TopHeader />
 
       {/* Main Content */}
       <main className="pb-20">
