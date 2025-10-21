@@ -104,3 +104,6 @@ pnpm cap:ios:open      # Open in Xcode
 - Dark theme (gray/black)
 - Responsive design
 - Banking features (transfers, cards, crypto, etc.)
+
+# 📝 Licence
+This Project is used the Apache 2.0 Licence see [LICENSE](LICENSE) for more information.
