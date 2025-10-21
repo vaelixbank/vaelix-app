@@ -1,0 +1,29 @@
+# Use Rust 1.75 Alpine for smaller image size
+FROM rust:1.75-alpine
+
+# Install required packages
+RUN apk add --no-cache musl-dev pkgconfig openssl-dev
+
+# Set working directory
+WORKDIR /app
+
+# Copy Cargo files
+COPY api/Cargo.toml ./
+
+# Create dummy src to cache dependencies
+RUN mkdir src && echo "fn main() {}" > src/main.rs
+
+# Build dependencies only
+RUN cargo build --release && rm -rf src
+
+# Copy source code
+COPY api/src ./src
+
+# Build the application
+RUN cargo build --release
+
+# Expose port
+EXPOSE 8080
+
+# Run the application
+CMD ["./target/release/vaelix-app"]

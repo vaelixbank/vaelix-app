@@ -20,6 +20,108 @@ pnpm install
 pnpm dev
 ```
 
+## 🐳 Docker Development
+
+This project includes Docker configuration for easy development setup.
+
+### Quick Start with Docker
+
+```bash
+# Start the full development environment
+make setup
+
+# Or manually:
+make docker-build
+make docker-up
+```
+
+The application will be available at:
+- **Next.js App**: http://localhost:3000
+- **Rust API**: http://localhost:8080
+- **PostgreSQL**: localhost:5432
+- **Redis**: localhost:6379
+
+### Docker Commands
+
+```bash
+# Build Docker images
+make docker-build
+
+# Start services
+make docker-up
+
+# Start with logs (development mode)
+make docker-dev
+
+# Stop services
+make docker-down
+
+# View logs
+make docker-logs
+
+# Clean up
+make docker-clean
+```
+
+### Database Management
+
+```bash
+# Start database
+make db-up
+
+# Reset database (WARNING: deletes all data)
+make db-reset
+
+# View database logs
+make db-logs
+```
+
+## 🛠️ Development Commands
+
+Use the Makefile for common development tasks:
+
+```bash
+# Show all available commands
+make help
+
+# Install dependencies
+make install
+
+# Start development server
+make dev
+
+# Build application
+make build
+
+# Run tests
+make test
+
+# Run linter
+make lint
+
+# Format code
+make format
+
+# Update dependencies
+make deps-update
+
+# Clean build artifacts
+make clean
+```
+
+### API Development
+
+```bash
+# Build Rust API
+make api-build
+
+# Run API locally
+make api-run
+
+# Test API
+make api-test
+```
+
 ## 📱 Mobile Builds
 
 This app uses Capacitor for mobile deployment on Android and iOS.

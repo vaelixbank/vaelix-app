@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  # Next.js Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NODE_ENV=development
+    command: pnpm dev --turbopack
+    depends_on:
+      - api
+    networks:
+      - vaelix-network
+
+  # Rust API
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./api:/app
+      - /app/target
+    environment:
+      - RUST_ENV=development
+    networks:
+      - vaelix-network
+
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=vaelix
+      - POSTGRES_USER=vaelix
+      - POSTGRES_PASSWORD=vaelix123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - vaelix-network
+
+  # Redis for caching
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - vaelix-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  vaelix-network:
+    driver: bridge
