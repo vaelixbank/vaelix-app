@@ -105,5 +105,5 @@ pnpm cap:ios:open      # Open in Xcode
 - Responsive design
 - Banking features (transfers, cards, crypto, etc.)
 
-# 📝 Licence
+## 📝 Licence
 This Project is used the Apache 2.0 Licence see [LICENSE](LICENSE) for more information.
