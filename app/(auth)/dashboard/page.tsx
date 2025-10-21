@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useStore } from '../../lib/store';
 import { DashboardSkeleton } from '../../components/ui/loading-skeleton';
 import { Icon } from '../../../lib/icon';
+import { formatBalance } from '../../lib/utils';
 import {
   Search,
   BarChart3,
@@ -127,7 +128,7 @@ export default function Dashboard() {
         <div className="text-center space-y-4">
           <p className="text-slate-400 text-sm">Personnel · EUR</p>
           <div className="text-7xl font-bold text-white">
-            {showBalance ? `${totalBalance.toFixed(2).replace('.', ',')} €` : '••••••'}
+            {showBalance ? `${formatBalance(totalBalance)} €` : '••••••'}
           </div>
           <button 
             onClick={handleToggleBalance}

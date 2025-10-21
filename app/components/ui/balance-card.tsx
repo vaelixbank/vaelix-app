@@ -5,7 +5,7 @@ import { Card, CardContent } from './card';
 import { Badge } from './badge';
 import { Icon } from '../../../lib/icon';
 import { Eye, EyeOff, TrendingUp, TrendingDown, Wallet } from 'lucide-react';
-import { cn } from '../../lib/utils';
+import { cn, formatBalance } from '../../lib/utils';
 
 export interface BalanceCardProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
@@ -34,10 +34,7 @@ const BalanceCard = forwardRef<HTMLDivElement, BalanceCardProps>(
     ...props 
   }, ref) => {
     const formatAmount = (value: number) => {
-      return value.toLocaleString('fr-FR', { 
-        minimumFractionDigits: 2, 
-        maximumFractionDigits: 2 
-      });
+      return formatBalance(value);
     };
 
     const formatChange = (value: number) => {
