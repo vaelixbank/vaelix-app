@@ -7,6 +7,8 @@ import { useApi } from '../../lib/useApi';
 import { DashboardSkeleton } from '../../components/ui/loading-skeleton';
 import { Icon } from '../../../lib/icon';
 import { formatBalance } from '../../lib/utils';
+import { useWidgets } from '../../lib/useWidgets';
+import { WidgetContainer } from '../../components/ui/widgets/WidgetContainer';
 import {
   Search,
   BarChart3,
@@ -15,14 +17,35 @@ import {
   ArrowUpDown,
   Building2,
   MoreHorizontal,
-  RefreshCw
+  RefreshCw,
+  TrendingUp,
+  TrendingDown,
+  PiggyBank,
+  Target,
+  Edit3,
+  Check,
+  RotateCcw
 } from 'lucide-react';
 
 export default function Dashboard() {
   const router = useRouter();
   const [showBalance, setShowBalance] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
-  const [useApiData, setUseApiData] = useState(false); // Toggle between mock and API data
+  const [useApiData, setUseApiData] = useState(false);
+
+  // Widget management
+  const {
+    widgets,
+    visibleWidgets,
+    isEditMode,
+    setIsEditMode,
+    updateWidgetPosition,
+    toggleWidgetVisibility,
+    addWidget,
+    removeWidget,
+    updateWidgetConfig,
+    resetToDefault
+  } = useWidgets();
 
   const {
     user,
@@ -30,11 +53,71 @@ export default function Dashboard() {
     accounts,
     getTotalBalance,
     getMonthlyExpenses,
+    getMonthlyIncome,
+    getSavingsRate,
     setLoading,
     isAuthenticated
   } = useStore();
 
   const { loadDashboard, isLoading: apiLoading, error: apiError } = useApi();
+
+  // Helper functions
+  const getCategoryIcon = (category?: string) => {
+    switch (category?.toLowerCase()) {
+      case 'food':
+      case 'restaurant':
+        return '🍽️';
+      case 'transport':
+      case 'transportation':
+        return '🚗';
+      case 'shopping':
+        return '🛍️';
+      case 'housing':
+      case 'rent':
+        return '🏠';
+      case 'card':
+      case 'payment':
+        return '💳';
+      case 'mobile':
+      case 'phone':
+        return '📱';
+      case 'entertainment':
+        return '🎬';
+      case 'health':
+        return '🏥';
+      case 'salary':
+        return '💰';
+      case 'transfer':
+        return '↔️';
+      default:
+        return '💰';
+    }
+  };
+
+  const getCategoryColor = (category: string) => {
+    const colors: Record<string, string> = {
+      food: 'bg-red-500',
+      transport: 'bg-blue-500',
+      shopping: 'bg-green-500',
+      entertainment: 'bg-purple-500',
+      housing: 'bg-orange-500',
+      health: 'bg-pink-500',
+      salary: 'bg-emerald-500',
+      transfer: 'bg-gray-500'
+    };
+    return colors[category] || 'bg-gray-400';
+  };
+
+  const getTimeAgo = (date: Date) => {
+    const now = new Date();
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+    if (diffInSeconds < 60) return 'il y a quelques secondes';
+    if (diffInSeconds < 3600) return `il y a ${Math.floor(diffInSeconds / 60)} min`;
+    if (diffInSeconds < 86400) return `il y a ${Math.floor(diffInSeconds / 3600)} h`;
+    if (diffInSeconds < 604800) return `il y a ${Math.floor(diffInSeconds / 86400)} j`;
+    return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+  };
 
   useEffect(() => {
     const initializeDashboard = async () => {
@@ -61,13 +144,82 @@ export default function Dashboard() {
     initializeDashboard();
   }, [isAuthenticated, router, setLoading, useApiData, loadDashboard]);
 
-  // Memoized values for performance - moved before early returns
+  // Enhanced financial calculations
   const totalBalance = useMemo(() => getTotalBalance(), [getTotalBalance]);
-  const recentTransactions = useMemo(() => transactions.slice(0, 3), [transactions]);
+  const monthlyIncome = useMemo(() => getMonthlyIncome(), [getMonthlyIncome]);
   const monthlyExpenses = useMemo(() => getMonthlyExpenses(), [getMonthlyExpenses]);
+  const savingsRate = useMemo(() => getSavingsRate(), [getSavingsRate]);
+
+  // Recent transactions with enhanced data
+  const recentTransactions = useMemo(() => {
+    return transactions.slice(0, 5).map(tx => ({
+      ...tx,
+      isPositive: tx.type === 'income',
+      categoryIcon: getCategoryIcon(tx.category || 'other'),
+      formattedAmount: formatBalance(Math.abs(tx.amount)),
+      timeAgo: getTimeAgo(new Date(tx.date))
+    }));
+  }, [transactions]);
+
+
+
+  // Spending breakdown by category
+  const spendingByCategory = useMemo(() => {
+    const categories = transactions
+      .filter(tx => tx.type === 'expense')
+      .reduce((acc, tx) => {
+        const category = tx.category || 'other';
+        acc[category] = (acc[category] || 0) + Math.abs(tx.amount);
+        return acc;
+      }, {} as Record<string, number>);
+
+    return Object.entries(categories)
+      .map(([category, amount]) => ({
+        category,
+        amount,
+        percentage: (amount / monthlyExpenses) * 100,
+        color: getCategoryColor(category)
+      }))
+      .sort((a, b) => b.amount - a.amount)
+      .slice(0, 4);
+  }, [transactions, monthlyExpenses]);
+
+  // Time calculations
   const dayOfMonth = useMemo(() => new Date().getDate(), []);
   const lastDayOfMonth = useMemo(() => new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate(), []);
   const monthProgressPercent = Math.min(100, Math.max(0, Math.round((dayOfMonth / lastDayOfMonth) * 100)));
+
+  // Quick stats
+  const quickStats = useMemo(() => [
+    {
+      label: 'Revenus du mois',
+      value: formatBalance(monthlyIncome),
+      change: '+12.5%',
+      trend: 'up' as const,
+      icon: TrendingUp
+    },
+    {
+      label: 'Dépenses du mois',
+      value: formatBalance(monthlyExpenses),
+      change: '-3.2%',
+      trend: 'down' as const,
+      icon: TrendingDown
+    },
+    {
+      label: 'Taux d\'épargne',
+      value: `${savingsRate.toFixed(1)}%`,
+      change: '+2.1%',
+      trend: 'up' as const,
+      icon: PiggyBank
+    },
+    {
+      label: 'Objectif épargne',
+      value: '78%',
+      change: '+5.3%',
+      trend: 'up' as const,
+      icon: Target
+    }
+  ], [monthlyIncome, monthlyExpenses, savingsRate]);
 
 
   // Memoized handlers
@@ -75,10 +227,32 @@ export default function Dashboard() {
     setShowBalance(!showBalance);
   }, [showBalance]);
 
-
   const handleTransactionClick = useCallback(() => {
     router.push('/transactions');
   }, [router]);
+
+  // Widget drag & drop handlers
+  const handleDragStart = useCallback((e: React.DragEvent, widgetId: string) => {
+    e.dataTransfer.setData('text/plain', widgetId);
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent, targetWidgetId: string) => {
+    e.preventDefault();
+    const draggedWidgetId = e.dataTransfer.getData('text/plain');
+
+    if (draggedWidgetId && draggedWidgetId !== targetWidgetId) {
+      const draggedWidget = visibleWidgets.find(w => w.id === draggedWidgetId);
+      const targetWidget = visibleWidgets.find(w => w.id === targetWidgetId);
+
+      if (draggedWidget && targetWidget) {
+        updateWidgetPosition(draggedWidgetId, targetWidget.position);
+      }
+    }
+  }, [visibleWidgets, updateWidgetPosition]);
 
   if (isLoading || apiLoading) {
     return <DashboardSkeleton />;
@@ -215,127 +389,102 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Transactions List - Microsoft style */}
-        <div className="space-y-3">
-          {recentTransactions.map((transaction) => (
-            <div
-              key={transaction.id}
-              className="bg-slate-800/50 rounded-2xl p-4 hover:bg-slate-700/50 transition-colors cursor-pointer"
-              onClick={handleTransactionClick}
+        {/* Widget Edit Controls - Revolut Style */}
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-white text-xl font-semibold">Tableau de bord</h2>
+            <p className="text-slate-400 text-sm mt-1">
+              {isEditMode ? 'Glissez-déposez pour réorganiser' : 'Personnalisez votre expérience'}
+            </p>
+          </div>
+          <div className="flex items-center space-x-3">
+            {isEditMode && (
+              <button
+                onClick={resetToDefault}
+                className="px-4 py-2 bg-slate-800/60 hover:bg-slate-700/60 border border-slate-700 text-slate-300 hover:text-white text-sm rounded-xl transition-all duration-200 flex items-center space-x-2"
+              >
+                <RotateCcw className="w-4 h-4" />
+                <span>Réinitialiser</span>
+              </button>
+            )}
+            <button
+              onClick={() => setIsEditMode(!isEditMode)}
+              className={`px-4 py-2 text-sm rounded-xl transition-all duration-200 flex items-center space-x-2 font-medium ${
+                isEditMode
+                  ? 'bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-600/25'
+                  : 'bg-slate-800/60 hover:bg-slate-700/60 border border-slate-700 text-slate-300 hover:text-white'
+              }`}
             >
-              <div className="flex items-center space-x-4">
-                {/* Microsoft Logo */}
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">MS</span>
-                </div>
-                
-                <div className="flex-1">
-                  <h4 className="text-white font-medium">{transaction.description}</h4>
-                  <p className="text-slate-400 text-sm">
-                    {new Date(transaction.date).toLocaleDateString('fr-FR', { 
-                      day: 'numeric', 
-                      month: 'short' 
-                    })}, {new Date(transaction.date).toLocaleTimeString('fr-FR', { 
-                      hour: '2-digit', 
-                      minute: '2-digit' 
-                    })} · Vérification de la carte
-                  </p>
-                </div>
-                
-                <div className="text-right">
-                  <p className="text-white font-bold">
-                    {transaction.type === 'income' ? '+' : '-'}€{Math.abs(transaction.amount).toFixed(2).replace('.', ',')}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))}
+              {isEditMode ? <Check className="w-4 h-4" /> : <Edit3 className="w-4 h-4" />}
+              <span>{isEditMode ? 'Terminer' : 'Personnaliser'}</span>
+            </button>
+          </div>
         </div>
 
-        {/* Desktop Grid Layout */}
-        <div className="lg:grid lg:grid-cols-2 lg:gap-6 space-y-6 lg:space-y-0">
-          {/* Cartes */}
-          <section className="bg-slate-800/60 border border-slate-700 rounded-2xl p-4">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-white font-semibold">Cartes</h2>
-              <span className="text-slate-400 text-sm">›</span>
-            </div>
-            <div className="flex space-x-4 overflow-x-auto pb-2">
-              {accounts.slice(0, 3).map((account) => (
-                <div key={account.id} className="min-w-[180px] h-28 rounded-xl p-4 bg-gradient-to-br from-slate-700 to-slate-900 border border-slate-700 flex flex-col justify-between">
-                  <div className="flex items-center justify-between">
-                    <div className="h-6 w-10 rounded bg-white/20" />
-                    <div className="h-6 w-10 rounded bg-white/20" />
-                  </div>
-                  <div>
-                    <p className="text-slate-300 text-xs mb-1">{account.name}</p>
-                    <p className="text-white font-semibold tracking-wider">•••• {account.iban ? account.iban.slice(-4) : '0000'}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-2 flex justify-center space-x-1">
-              <span className="w-2 h-2 rounded-full bg-white" />
-              <span className="w-2 h-2 rounded-full bg-slate-500" />
-            </div>
-          </section>
+        {/* Dynamic Widgets Grid - Revolut Style */}
+        <div className="grid gap-6 auto-rows-max">
+          {visibleWidgets.map((widget, index) => {
+            // Different layouts based on widget type for better visual hierarchy
+            const getWidgetLayout = (type: string) => {
+              switch (type) {
+                case 'quick-stats':
+                  return 'col-span-1 lg:col-span-2'; // Full width on mobile, 2 cols on desktop
+                case 'spending-breakdown':
+                case 'accounts':
+                  return 'col-span-1'; // Single column
+                case 'transactions':
+                  return 'col-span-1 lg:col-span-2'; // Can be wider
+                case 'watchlist':
+                  return 'col-span-1';
+                case 'monthly-spending':
+                  return 'col-span-1';
+                default:
+                  return 'col-span-1';
+              }
+            };
 
-          {/* Dépensés ce mois-ci */}
-          <section className="bg-slate-800/60 border border-slate-700 rounded-2xl p-4">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-slate-300 text-sm">Dépensés ce mois-ci</h2>
-              <span className="text-slate-300 text-sm">0 €</span>
-            </div>
-            <div className="text-white text-5xl font-bold mb-6">{monthlyExpenses.toFixed(0)} €</div>
-            <div className="h-1.5 w-full bg-slate-700 rounded-full overflow-hidden">
-              <div className="h-full bg-white" style={{ width: `${monthProgressPercent}%` }} />
-            </div>
-            <div className="mt-3 flex justify-between text-slate-400 text-xs">
-              <span>1</span>
-              <span>6</span>
-              <span>11</span>
-              <span>16</span>
-              <span>21</span>
-              <span>26</span>
-              <span>{lastDayOfMonth}</span>
-            </div>
-          </section>
+            return (
+              <div
+                key={widget.id}
+                className={`${getWidgetLayout(widget.type)} ${
+                  isEditMode ? 'animate-pulse' : ''
+                } transition-all duration-300`}
+                style={{
+                  animationDelay: isEditMode ? `${index * 50}ms` : '0ms'
+                }}
+              >
+                <WidgetContainer
+                  widget={widget}
+                  isEditMode={isEditMode}
+                  onRemove={removeWidget}
+                  onDragStart={handleDragStart}
+                  onDragOver={handleDragOver}
+                  onDrop={handleDrop}
+                  totalBalance={totalBalance}
+                  monthlyIncome={monthlyIncome}
+                  monthlyExpenses={monthlyExpenses}
+                  savingsRate={savingsRate}
+                  transactions={transactions}
+                  accounts={accounts}
+                  spendingByCategory={spendingByCategory}
+                  monthProgressPercent={monthProgressPercent}
+                  lastDayOfMonth={lastDayOfMonth}
+                  dayOfMonth={dayOfMonth}
+                  quickStats={quickStats}
+                />
+              </div>
+            );
+          })}
         </div>
 
-        {/* Liste de surveillance - Full width */}
-        <section className="bg-slate-800/60 border border-slate-700 rounded-2xl p-4">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-slate-300">Liste de surveillance</h2>
-            <span className="text-slate-400">›</span>
-          </div>
-          <div className="space-y-4">
-            {[
-              { name: 'DogeCoin', symbol: 'DOGE', pair: 'DOGE à EUR', price: '0,17 €', change: '+ 2,19 %', color: 'bg-yellow-400' }, 
-              { name: 'Bitcoin', symbol: 'BTC', pair: 'BTC à EUR', price: '95 361 €', change: '+ 1,79 %', color: 'bg-orange-500' }
-            ].map((c) => (
-              <div key={c.symbol} className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className={`h-10 w-10 rounded-full ${c.color} flex items-center justify-center text-white font-bold`}>
-                    {c.symbol[0]}
-                  </div>
-                  <div>
-                    <p className="text-white font-medium">{c.name}</p>
-                    <p className="text-slate-400 text-sm">{c.pair}</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p className="text-white font-semibold">{c.price}</p>
-                  <p className="text-green-400 text-sm">{c.change}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Ajouter des widgets */}
-        <div className="flex justify-center pb-6">
-          <button className="px-4 py-3 bg-slate-800/60 border border-slate-700 text-white rounded-full text-sm">
-            + Ajouter des widgets
+        {/* Add Widget Button - Always visible like Revolut */}
+        <div className="flex justify-center pt-6 pb-4">
+          <button
+            onClick={() => router.push('/widgets')}
+            className="px-6 py-3 bg-slate-800/60 hover:bg-slate-700/60 border border-slate-700 text-slate-300 hover:text-white rounded-full text-sm font-medium transition-all duration-200 flex items-center space-x-2 backdrop-blur-sm"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Ajouter des widgets</span>
           </button>
         </div>
 
