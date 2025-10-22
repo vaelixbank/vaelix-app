@@ -170,12 +170,20 @@ export default function Send() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-8">
+    <div className="min-h-screen bg-slate-900 relative overflow-hidden flex items-center justify-center p-4">
+      {/* Background Pattern - matching dashboard */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        {/* Futuristic cityscape effect */}
+        <div className="absolute bottom-0 left-0 right-0 h-80 bg-gradient-to-t from-orange-500/20 via-orange-500/5 to-transparent"></div>
+        <div className="absolute top-1/3 right-0 w-96 h-96 bg-gradient-to-l from-teal-500/10 to-transparent rounded-full"></div>
+        <div className="absolute top-1/2 left-0 w-64 h-64 bg-gradient-to-r from-purple-500/5 to-transparent rounded-full"></div>
+      </div>
+
+      <div className="relative z-10 w-full max-w-md space-y-8">
         {/* Header */}
         <div className="text-center animate-fade-in-up">
-          <h1 className="text-3xl font-bold text-gray-900">Envoyer de l&apos;argent</h1>
-          <p className="text-gray-600 mt-2">Transférez des fonds en toute sécurité</p>
+          <h1 className="text-3xl font-bold text-white">Envoyer de l&apos;argent</h1>
+          <p className="text-slate-400 mt-2">Transférez des fonds en toute sécurité</p>
         </div>
 
         {/* Send Form */}
@@ -186,7 +194,7 @@ export default function Send() {
           <CardContent>
             <form onSubmit={(e) => { e.preventDefault(); handleSend(); }} className="space-y-4">
               <div className="space-y-2">
-                <label htmlFor="recipient" className="text-sm font-medium text-gray-700">
+                <label htmlFor="recipient" className="text-sm font-medium text-slate-300">
                   Destinataire
                 </label>
                 <Input
@@ -200,7 +208,7 @@ export default function Send() {
                 />
               </div>
               <div className="space-y-2">
-                <label htmlFor="amount" className="text-sm font-medium text-gray-700">
+                <label htmlFor="amount" className="text-sm font-medium text-slate-300">
                   Montant
                 </label>
                 <Input
@@ -216,21 +224,21 @@ export default function Send() {
 
               {/* Payment Method Selection */}
               <div className="space-y-3">
-                <label className="block text-sm font-medium text-gray-700">Méthode de paiement</label>
+                <label className="block text-sm font-medium text-slate-300">Méthode de paiement</label>
                 <div className="space-y-2">
-                  <label className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="bank"
-                      checked={paymentMethod === 'bank'}
-                      onChange={(e) => setPaymentMethod(e.target.value)}
-                      className="mr-3 text-primary"
-                    />
-                    <span className="text-sm font-medium">Virement bancaire</span>
-                  </label>
+                   <label className="flex items-center p-3 border border-slate-600 rounded-lg hover:bg-slate-700/50 cursor-pointer">
+                     <input
+                       type="radio"
+                       name="paymentMethod"
+                       value="bank"
+                       checked={paymentMethod === 'bank'}
+                       onChange={(e) => setPaymentMethod(e.target.value)}
+                       className="mr-3 text-primary"
+                     />
+                     <span className="text-sm font-medium text-white">Virement bancaire</span>
+                   </label>
                   {applePayAvailable && (
-                    <label className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                    <label className="flex items-center p-3 border border-slate-600 rounded-lg hover:bg-slate-700/50 cursor-pointer">
                       <input
                         type="radio"
                         name="paymentMethod"
@@ -239,11 +247,11 @@ export default function Send() {
                         onChange={(e) => setPaymentMethod(e.target.value)}
                         className="mr-3 text-primary"
                       />
-                      <span className="text-sm font-medium">Apple Pay</span>
+                      <span className="text-sm font-medium text-white">Apple Pay</span>
                     </label>
                   )}
                   {googlePayAvailable && (
-                    <label className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                    <label className="flex items-center p-3 border border-slate-600 rounded-lg hover:bg-slate-700/50 cursor-pointer">
                       <input
                         type="radio"
                         name="paymentMethod"
@@ -252,17 +260,17 @@ export default function Send() {
                         onChange={(e) => setPaymentMethod(e.target.value)}
                         className="mr-3 text-primary"
                       />
-                      <span className="text-sm font-medium">Google Pay</span>
+                      <span className="text-sm font-medium text-white">Google Pay</span>
                     </label>
                   )}
 
                   {/* Wallet Cards */}
                   {walletCards.filter(card => card.status === 'active').length > 0 && (
                     <div className="mt-4">
-                      <p className="text-sm font-medium text-gray-700 mb-2">Cartes dans le portefeuille</p>
+                      <p className="text-sm font-medium text-slate-300 mb-2">Cartes dans le portefeuille</p>
                       <div className="space-y-2">
                         {walletCards.filter(card => card.status === 'active').map((walletCard) => (
-                          <label key={walletCard.id} className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                          <label key={walletCard.id} className="flex items-center p-3 border border-slate-600 rounded-lg hover:bg-slate-700/50 cursor-pointer">
                             <input
                               type="radio"
                               name="paymentMethod"
@@ -308,7 +316,7 @@ export default function Send() {
                 <Button
                   type="button"
                   onClick={handleApplePay}
-                  className="w-full bg-black hover:bg-gray-800 text-white"
+                  className="w-full bg-slate-800 hover:bg-slate-700 text-white"
                   size="lg"
                 >
                   <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
@@ -344,7 +352,7 @@ export default function Send() {
         </Card>
 
         {/* Footer */}
-        <div className="text-center text-xs text-gray-500 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+        <div className="text-center text-xs text-slate-400 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
           <p>Protégé par un cryptage bancaire de niveau bancaire</p>
         </div>
       </div>

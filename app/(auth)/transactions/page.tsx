@@ -89,8 +89,16 @@ export default function Transactions() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className="max-w-md mx-auto px-4 py-6 space-y-6">
+    <div className="min-h-screen bg-slate-900 relative overflow-hidden">
+      {/* Background Pattern - matching dashboard */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        {/* Futuristic cityscape effect */}
+        <div className="absolute bottom-0 left-0 right-0 h-80 bg-gradient-to-t from-orange-500/20 via-orange-500/5 to-transparent"></div>
+        <div className="absolute top-1/3 right-0 w-96 h-96 bg-gradient-to-l from-teal-500/10 to-transparent rounded-full"></div>
+        <div className="absolute top-1/2 left-0 w-64 h-64 bg-gradient-to-r from-purple-500/5 to-transparent rounded-full"></div>
+      </div>
+
+      <div className="relative z-10 max-w-md mx-auto px-4 py-6 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between pt-4">
           <div className="flex items-center space-x-3">
@@ -98,18 +106,18 @@ export default function Transactions() {
               variant="ghost"
               size="icon"
               onClick={() => router.back()}
-              className="rounded-2xl bg-white/80 backdrop-blur-sm shadow-lg hover:bg-white/90"
+              className="rounded-2xl bg-slate-800/60 backdrop-blur-sm shadow-lg hover:bg-slate-700/60"
             >
-              <Icon icon={ArrowLeft} size={20} className="text-gray-600" />
+              <Icon icon={ArrowLeft} size={20} className="text-slate-300" />
             </Button>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Transactions</h1>
-              <p className="text-gray-600 text-sm">Historique de vos opérations</p>
+              <h1 className="text-2xl font-bold text-white">Transactions</h1>
+              <p className="text-slate-400 text-sm">Historique de vos opérations</p>
             </div>
+            <Button variant="ghost" size="icon" className="rounded-2xl bg-slate-800/60 backdrop-blur-sm shadow-lg hover:bg-slate-700/60">
+              <Icon icon={MoreHorizontal} size={20} className="text-slate-300" />
+            </Button>
           </div>
-          <Button variant="ghost" size="icon" className="rounded-2xl bg-white/80 backdrop-blur-sm shadow-lg hover:bg-white/90">
-            <Icon icon={MoreHorizontal} size={20} className="text-gray-600" />
-          </Button>
         </div>
 
         {/* Monthly Summary */}
@@ -155,7 +163,7 @@ export default function Transactions() {
 
           {/* Category Filter */}
           <div className="space-y-2">
-            <p className="text-sm font-medium text-foreground">Catégorie</p>
+            <p className="text-sm font-medium text-white">Catégorie</p>
             <div className="flex flex-wrap gap-2">
               {categories.map((category) => (
                 <Button
@@ -173,7 +181,7 @@ export default function Transactions() {
 
           {/* Type Filter */}
           <div className="space-y-2">
-            <p className="text-sm font-medium text-foreground">Type</p>
+            <p className="text-sm font-medium text-white">Type</p>
             <div className="flex flex-wrap gap-2">
               {types.map((type) => (
                 <Button
@@ -193,7 +201,7 @@ export default function Transactions() {
         {/* Transactions List */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-foreground">
+            <h2 className="text-lg font-semibold text-white">
               {filteredTransactions.length} transaction{filteredTransactions.length > 1 ? 's' : ''}
             </h2>
             <Button variant="ghost" size="sm" className="text-primary">
@@ -203,12 +211,12 @@ export default function Transactions() {
           </div>
 
           {filteredTransactions.length === 0 ? (
-            <div className="bg-white rounded-2xl p-8 text-center shadow-lg">
-              <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Icon icon={Search} size={24} className="text-gray-500" />
+            <div className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-8 text-center shadow-lg">
+              <div className="w-16 h-16 bg-slate-700/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Icon icon={Wallet} size={24} className="text-slate-400" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Aucune transaction trouvée</h3>
-              <p className="text-gray-600 text-sm">
+              <h3 className="text-lg font-semibold text-white mb-2">Aucune transaction trouvée</h3>
+              <p className="text-slate-400 text-sm">
                 Essayez de modifier vos filtres ou votre recherche
               </p>
             </div>
@@ -229,7 +237,7 @@ export default function Transactions() {
                   variant="revolut"
                   className="animate-slide-in-up"
                   style={{ animationDelay: `${index * 0.1}s` }}
-                  onPress={() => {
+                  onClick={() => {
                     // Handle transaction details
                     console.log('Transaction details:', transaction);
                   }}

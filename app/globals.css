@@ -2,104 +2,105 @@
 @import "tailwindcss";
 
 :root {
-  /* Revolut-inspired theme colors */
-  --background: #f8fafc;
-  --foreground: #1e293b;
-  --card: #ffffff;
-  --card-foreground: #1e293b;
-  --popover: #ffffff;
-  --popover-foreground: #1e293b;
-  --primary: #7c3aed;
+  /* Dark theme as default - matching dashboard */
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  --card: #1e293b;
+  --card-foreground: #f8fafc;
+  --popover: #1e293b;
+  --popover-foreground: #f8fafc;
+  --primary: #a855f7;
   --primary-foreground: #ffffff;
-  --secondary: #f1f5f9;
-  --secondary-foreground: #1e293b;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --accent: #f1f5f9;
-  --accent-foreground: #1e293b;
+  --secondary: #334155;
+  --secondary-foreground: #f8fafc;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --accent: #334155;
+  --accent-foreground: #f8fafc;
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
   --success: #10b981;
   --success-foreground: #ffffff;
   --warning: #f59e0b;
   --warning-foreground: #ffffff;
-  --border: #e2e8f0;
-  --input: #ffffff;
-  --ring: #7c3aed;
+  --border: #334155;
+  --input: #1e293b;
+  --ring: #a855f7;
   --radius: 1rem;
-  
-  /* Revolut-style banking colors */
-  --bank-primary: #7c3aed;
-  --bank-secondary: #a855f7;
-  --bank-accent: #06b6d4;
-  --bank-success: #10b981;
-  --bank-warning: #f59e0b;
-  --bank-danger: #ef4444;
-  --bank-info: #3b82f6;
-  
-  /* Revolut gradient colors */
-  --gradient-primary: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
-  --gradient-success: linear-gradient(135deg, #10b981 0%, #34d399 100%);
-  --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
-  --gradient-danger: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
-  --gradient-info: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
 
-  /* Shadows - Revolut style subtle shadows */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  /* Revolut-style banking colors - dark mode */
+  --bank-primary: #a855f7;
+  --bank-secondary: #c084fc;
+  --bank-accent: #22d3ee;
+  --bank-success: #34d399;
+  --bank-warning: #fbbf24;
+  --bank-danger: #f87171;
+  --bank-info: #60a5fa;
+
+  /* Revolut gradient colors - dark mode */
+  --gradient-primary: linear-gradient(135deg, #a855f7 0%, #c084fc 100%);
+  --gradient-success: linear-gradient(135deg, #34d399 0%, #6ee7b7 100%);
+  --gradient-warning: linear-gradient(135deg, #fbbf24 0%, #fde68a 100%);
+  --gradient-danger: linear-gradient(135deg, #f87171 0%, #fca5a5 100%);
+  --gradient-info: linear-gradient(135deg, #60a5fa 0%, #93c5fd 100%);
+
+  /* Shadows - dark mode */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.4), 0 8px 10px -6px rgb(0 0 0 / 0.4);
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
-    --background: #0f172a;
-    --foreground: #f8fafc;
-    --card: #1e293b;
-    --card-foreground: #f8fafc;
-    --popover: #1e293b;
-    --popover-foreground: #f8fafc;
-    --primary: #a855f7;
+    /* Light theme for users who prefer light mode */
+    --background: #f8fafc;
+    --foreground: #1e293b;
+    --card: #ffffff;
+    --card-foreground: #1e293b;
+    --popover: #ffffff;
+    --popover-foreground: #1e293b;
+    --primary: #7c3aed;
     --primary-foreground: #ffffff;
-    --secondary: #334155;
-    --secondary-foreground: #f8fafc;
-    --muted: #1e293b;
-    --muted-foreground: #94a3b8;
-    --accent: #334155;
-    --accent-foreground: #f8fafc;
+    --secondary: #f1f5f9;
+    --secondary-foreground: #1e293b;
+    --muted: #f1f5f9;
+    --muted-foreground: #64748b;
+    --accent: #f1f5f9;
+    --accent-foreground: #1e293b;
     --destructive: #ef4444;
     --destructive-foreground: #ffffff;
     --success: #10b981;
     --success-foreground: #ffffff;
     --warning: #f59e0b;
     --warning-foreground: #ffffff;
-    --border: #334155;
-    --input: #1e293b;
-    --ring: #a855f7;
-    
-    /* Revolut-style banking colors - dark mode */
-    --bank-primary: #a855f7;
-    --bank-secondary: #c084fc;
-    --bank-accent: #22d3ee;
-    --bank-success: #34d399;
-    --bank-warning: #fbbf24;
-    --bank-danger: #f87171;
-    --bank-info: #60a5fa;
-    
-    /* Revolut gradient colors - dark mode */
-    --gradient-primary: linear-gradient(135deg, #a855f7 0%, #c084fc 100%);
-    --gradient-success: linear-gradient(135deg, #34d399 0%, #6ee7b7 100%);
-    --gradient-warning: linear-gradient(135deg, #fbbf24 0%, #fde68a 100%);
-    --gradient-danger: linear-gradient(135deg, #f87171 0%, #fca5a5 100%);
-    --gradient-info: linear-gradient(135deg, #60a5fa 0%, #93c5fd 100%);
+    --border: #e2e8f0;
+    --input: #ffffff;
+    --ring: #7c3aed;
 
-    /* Shadows */
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.4);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
-    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.4), 0 8px 10px -6px rgb(0 0 0 / 0.4);
+    /* Revolut-style banking colors - light mode */
+    --bank-primary: #7c3aed;
+    --bank-secondary: #a855f7;
+    --bank-accent: #06b6d4;
+    --bank-success: #10b981;
+    --bank-warning: #f59e0b;
+    --bank-danger: #ef4444;
+    --bank-info: #3b82f6;
+
+    /* Revolut gradient colors - light mode */
+    --gradient-primary: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+    --gradient-success: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+    --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+    --gradient-danger: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+    --gradient-info: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+
+    /* Shadows - light mode */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   }
 }
 
@@ -384,13 +385,13 @@ body {
 
 /* Glass morphism */
 .glass {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
-.glass-dark {
-  background: rgba(0, 0, 0, 0.25);
+.glass-light {
+  background: rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.18);
 }

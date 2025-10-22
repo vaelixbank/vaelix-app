@@ -48,9 +48,17 @@ export default function WidgetsPage() {
   const hiddenWidgets = widgets.filter(w => !w.isVisible);
 
   return (
-    <div className="min-h-screen bg-slate-900">
+    <div className="min-h-screen bg-slate-900 relative overflow-hidden">
+      {/* Background Pattern - matching dashboard */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        {/* Futuristic cityscape effect */}
+        <div className="absolute bottom-0 left-0 right-0 h-80 bg-gradient-to-t from-orange-500/20 via-orange-500/5 to-transparent"></div>
+        <div className="absolute top-1/3 right-0 w-96 h-96 bg-gradient-to-l from-teal-500/10 to-transparent rounded-full"></div>
+        <div className="absolute top-1/2 left-0 w-64 h-64 bg-gradient-to-r from-purple-500/5 to-transparent rounded-full"></div>
+      </div>
+
       {/* Header */}
-      <div className="bg-slate-800/50 border-b border-slate-700">
+      <div className="relative z-10 bg-slate-800/50 border-b border-slate-700">
         <div className="max-w-md mx-auto px-4 py-4">
           <div className="flex items-center space-x-4">
             <button

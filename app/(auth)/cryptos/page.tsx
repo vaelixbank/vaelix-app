@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { User } from '../../lib/store';
+import { ArrowLeft } from 'lucide-react';
 
 import { Button } from '../../components/ui/button';
 
@@ -71,24 +72,30 @@ export default function Cryptos() {
   const totalValue = cryptos.reduce((total, crypto) => total + (crypto.price * crypto.balance), 0);
 
   if (!user) return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-400"></div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-900 relative overflow-hidden">
+      {/* Background Pattern - matching dashboard */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        {/* Futuristic cityscape effect */}
+        <div className="absolute bottom-0 left-0 right-0 h-80 bg-gradient-to-t from-orange-500/20 via-orange-500/5 to-transparent"></div>
+        <div className="absolute top-1/3 right-0 w-96 h-96 bg-gradient-to-l from-teal-500/10 to-transparent rounded-full"></div>
+        <div className="absolute top-1/2 left-0 w-64 h-64 bg-gradient-to-r from-purple-500/5 to-transparent rounded-full"></div>
+      </div>
+
       {/* Header */}
-      <div className="bg-white shadow-sm sticky top-0 z-10">
+      <div className="relative z-10 bg-slate-800/60 backdrop-blur-sm shadow-sm sticky top-0 z-10">
         <div className="px-6 py-4">
           <div className="flex items-center justify-between">
-            <Link href="/dashboard" className="p-2 -m-2 text-gray-600 hover:text-gray-900 transition-colors duration-200">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
+            <Link href="/dashboard" className="p-2 -m-2 text-slate-400 hover:text-white transition-colors duration-200">
+              <ArrowLeft className="w-5 h-5" />
             </Link>
-            <h1 className="text-xl font-bold text-gray-900">Cryptomonnaies</h1>
-            <button className="p-2 -m-2 text-gray-600 hover:text-gray-900 transition-colors duration-200">
+            <h1 className="text-xl font-bold text-white">Cryptomonnaies</h1>
+            <button className="p-2 -m-2 text-slate-400 hover:text-white transition-colors duration-200">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
               </svg>
@@ -117,64 +124,63 @@ export default function Cryptos() {
         {/* Crypto List */}
         <div className="space-y-4">
           {cryptos.map((crypto, index) => (
-             <div key={crypto.id} className="bg-white rounded-2xl p-6 shadow-sm hover-lift animate-fade-in hover-scale" style={{ animationDelay: `${index * 0.1}s` }}>
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center">
-                  <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mr-4">
-                    <span className="text-xl">{crypto.icon}</span>
+             <div key={crypto.id} className="bg-slate-800/60 backdrop-blur-sm rounded-2xl p-6 shadow-sm hover-lift animate-fade-in hover-scale" style={{ animationDelay: `${index * 0.1}s` }}>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-16 h-16 bg-slate-700/50 rounded-full flex items-center justify-center">
+                      <span className="text-2xl">{crypto.icon}</span>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-white">{crypto.name}</h3>
+                      <p className="text-sm text-slate-400">{crypto.symbol}</p>
+                    </div>
                   </div>
+                  <div className="text-right">
+                    <p className="text-lg font-bold text-white">${crypto.price.toLocaleString()}</p>
+                    <p className={`text-sm font-medium ${crypto.change >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                      {crypto.change >= 0 ? '+' : ''}{crypto.change.toFixed(2)}%
+                    </p>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center mb-4">
                   <div>
-                    <h3 className="font-semibold text-gray-900">{crypto.name}</h3>
-                    <p className="text-sm text-gray-500">{crypto.symbol}</p>
+                    <p className="text-sm text-slate-400">Balance</p>
+                    <p className="font-semibold text-white">{crypto.balance} {crypto.symbol}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-slate-400">Valeur</p>
+                    <p className="font-semibold text-white">${(crypto.price * crypto.balance).toLocaleString()}</p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-lg font-bold text-gray-900">${crypto.price.toLocaleString()}</p>
-                  <p className={`text-sm font-medium ${crypto.change > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {crypto.change > 0 ? '+' : ''}{crypto.change}%
-                  </p>
-                </div>
-              </div>
 
-              <div className="flex justify-between items-center mb-4">
-                <div>
-                  <p className="text-sm text-gray-500">Balance</p>
-                  <p className="font-semibold text-gray-900">{crypto.balance} {crypto.symbol}</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm text-gray-500">Valeur</p>
-                  <p className="font-semibold text-gray-900">${(crypto.price * crypto.balance).toLocaleString()}</p>
+                {/* Actions */}
+                <div className="flex space-x-3">
+                  <Button variant="outline" className="flex-1 bg-transparent border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white" size="lg">
+                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                    </svg>
+                    Acheter
+                  </Button>
+                  <Button className="flex-1 bg-orange-600 hover:bg-orange-700" size="lg">
+                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                    </svg>
+                    Vendre
+                  </Button>
                 </div>
               </div>
-
-              {/* Actions */}
-              <div className="flex space-x-3">
-                <Button variant="outline" className="flex-1" size="lg">
-                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                  </svg>
-                  Acheter
-                </Button>
-                <Button className="flex-1 bg-orange-600 hover:bg-orange-700" size="lg">
-                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                  </svg>
-                  Vendre
-                </Button>
-              </div>
-            </div>
           ))}
 
           {/* Add New Crypto */}
-          <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-6 border-2 border-dashed border-orange-200 hover:border-orange-300 transition-colors duration-200 cursor-pointer">
+          <div className="bg-slate-800/40 backdrop-blur-sm rounded-2xl p-6 border-2 border-dashed border-slate-600 hover:border-slate-500 transition-colors duration-200 cursor-pointer">
             <div className="text-center">
-              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-16 h-16 bg-slate-700/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Nouvelle crypto</h3>
-              <p className="text-gray-600">Ajoutez une nouvelle cryptomonnaie à votre portefeuille</p>
+              <h3 className="text-lg font-semibold text-white mb-2">Nouvelle crypto</h3>
+              <p className="text-slate-400">Ajoutez une nouvelle cryptomonnaie à votre portefeuille</p>
             </div>
           </div>
         </div>

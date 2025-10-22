@@ -20,12 +20,20 @@ export default function Request() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-8">
+    <div className="min-h-screen bg-slate-900 relative overflow-hidden flex items-center justify-center p-4">
+      {/* Background Pattern - matching dashboard */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        {/* Futuristic cityscape effect */}
+        <div className="absolute bottom-0 left-0 right-0 h-80 bg-gradient-to-t from-orange-500/20 via-orange-500/5 to-transparent"></div>
+        <div className="absolute top-1/3 right-0 w-96 h-96 bg-gradient-to-l from-teal-500/10 to-transparent rounded-full"></div>
+        <div className="absolute top-1/2 left-0 w-64 h-64 bg-gradient-to-r from-purple-500/5 to-transparent rounded-full"></div>
+      </div>
+
+      <div className="relative z-10 w-full max-w-md space-y-8">
         {/* Header */}
         <div className="text-center animate-fade-in-up">
-          <h1 className="text-3xl font-bold text-gray-900">Demander de l&apos;argent</h1>
-          <p className="text-gray-600 mt-2">Envoyez une demande de paiement</p>
+          <h1 className="text-3xl font-bold text-white">Demander de l&apos;argent</h1>
+          <p className="text-slate-400 mt-2">Envoyez une demande de paiement</p>
         </div>
 
         {/* Request Form */}
@@ -36,8 +44,8 @@ export default function Request() {
           <CardContent>
             <form onSubmit={(e) => { e.preventDefault(); handleRequest(); }} className="space-y-4">
               <div className="space-y-2">
-                <label htmlFor="requester" className="text-sm font-medium text-gray-700">
-                  Destinataire
+                <label htmlFor="requester" className="text-sm font-medium text-slate-300">
+                  Demandeur
                 </label>
                 <Input
                   id="requester"
@@ -50,8 +58,8 @@ export default function Request() {
                 />
               </div>
               <div className="space-y-2">
-                <label htmlFor="amount" className="text-sm font-medium text-gray-700">
-                  Montant
+                <label htmlFor="amount" className="text-sm font-medium text-slate-300">
+                  Montant demandé
                 </label>
                 <Input
                   id="amount"
@@ -78,7 +86,7 @@ export default function Request() {
         </Card>
 
         {/* Footer */}
-        <div className="text-center text-xs text-gray-500 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+        <div className="text-center text-xs text-slate-400 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
           <p>Protégé par un cryptage bancaire de niveau bancaire</p>
         </div>
       </div>

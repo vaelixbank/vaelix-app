@@ -175,9 +175,17 @@ export default function CardDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-slate-900 relative overflow-hidden">
+      {/* Background Pattern - matching dashboard */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        {/* Futuristic cityscape effect */}
+        <div className="absolute bottom-0 left-0 right-0 h-80 bg-gradient-to-t from-orange-500/20 via-orange-500/5 to-transparent"></div>
+        <div className="absolute top-1/3 right-0 w-96 h-96 bg-gradient-to-l from-teal-500/10 to-transparent rounded-full"></div>
+        <div className="absolute top-1/2 left-0 w-64 h-64 bg-gradient-to-r from-purple-500/5 to-transparent rounded-full"></div>
+      </div>
+
       {/* Status Bar */}
-      <div className="flex items-center justify-between px-4 pt-2 pb-1">
+      <div className="relative z-10 flex items-center justify-between px-4 pt-2 pb-1">
         <div className="flex items-center space-x-2">
           <span className="text-white font-medium text-sm">{currentTime}</span>
           <Icon icon={ChevronUp} size={12} className="text-white/60" />

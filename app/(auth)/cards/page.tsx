@@ -115,9 +115,17 @@ export default function Cards() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900">
+    <div className="min-h-screen bg-slate-900 relative overflow-hidden">
+      {/* Background Pattern - matching dashboard */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        {/* Futuristic cityscape effect */}
+        <div className="absolute bottom-0 left-0 right-0 h-80 bg-gradient-to-t from-orange-500/20 via-orange-500/5 to-transparent"></div>
+        <div className="absolute top-1/3 right-0 w-96 h-96 bg-gradient-to-l from-teal-500/10 to-transparent rounded-full"></div>
+        <div className="absolute top-1/2 left-0 w-64 h-64 bg-gradient-to-r from-purple-500/5 to-transparent rounded-full"></div>
+      </div>
+
       {/* Header */}
-      <div className="flex items-center justify-between px-4 pt-12 pb-6">
+      <div className="relative z-10 flex items-center justify-between px-4 pt-12 pb-6">
         <div className="flex items-center space-x-2">
           <span className="text-white font-medium text-lg">{currentTime}</span>
         </div>
@@ -202,7 +210,7 @@ export default function Cards() {
         </div>
 
         {/* Add Button */}
-        <button className="w-full bg-white hover:bg-gray-100 rounded-2xl p-4 flex items-center justify-center space-x-2 transition-colors">
+        <button className="w-full bg-slate-800 hover:bg-slate-700 rounded-2xl p-4 flex items-center justify-center space-x-2 transition-colors text-white">
           <Icon icon={Plus} size={20} className="text-slate-900" />
           <span className="text-slate-900 font-semibold">Ajouter</span>
         </button>
