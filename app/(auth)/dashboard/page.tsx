@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useStore } from '../../lib/store';
+import { useApi } from '../../lib/useApi';
 import { DashboardSkeleton } from '../../components/ui/loading-skeleton';
 import { Icon } from '../../../lib/icon';
 import { formatBalance } from '../../lib/utils';
@@ -13,37 +14,52 @@ import {
   Plus,
   ArrowUpDown,
   Building2,
-  MoreHorizontal
+  MoreHorizontal,
+  RefreshCw
 } from 'lucide-react';
 
 export default function Dashboard() {
   const router = useRouter();
   const [showBalance, setShowBalance] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
-  
-  const { 
-    user, 
-    transactions, 
+  const [useApiData, setUseApiData] = useState(false); // Toggle between mock and API data
+
+  const {
+    user,
+    transactions,
     accounts,
-    getTotalBalance, 
+    getTotalBalance,
     getMonthlyExpenses,
     setLoading,
     isAuthenticated
   } = useStore();
 
+  const { loadDashboard, isLoading: apiLoading, error: apiError } = useApi();
+
   useEffect(() => {
-    // Simulate loading
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-      setLoading(false);
-    }, 1000);
+    const initializeDashboard = async () => {
+      if (!isAuthenticated) {
+        router.push('/login');
+        return;
+      }
 
-    if (!isAuthenticated) {
-      router.push('/login');
-    }
+      if (useApiData) {
+        // Load data from API
+        await loadDashboard();
+        setIsLoading(false);
+      } else {
+        // Simulate loading for mock data
+        const timer = setTimeout(() => {
+          setIsLoading(false);
+          setLoading(false);
+        }, 1000);
 
-    return () => clearTimeout(timer);
-  }, [isAuthenticated, router, setLoading]);
+        return () => clearTimeout(timer);
+      }
+    };
+
+    initializeDashboard();
+  }, [isAuthenticated, router, setLoading, useApiData, loadDashboard]);
 
   // Memoized values for performance - moved before early returns
   const totalBalance = useMemo(() => getTotalBalance(), [getTotalBalance]);
@@ -64,7 +80,7 @@ export default function Dashboard() {
     router.push('/transactions');
   }, [router]);
 
-  if (isLoading) {
+  if (isLoading || apiLoading) {
     return <DashboardSkeleton />;
   }
 
@@ -109,13 +125,24 @@ export default function Dashboard() {
           
           {/* Right Icons */}
           <div className="flex items-center space-x-2">
-            <button 
+            <button
+              onClick={() => setUseApiData(!useApiData)}
+              className={`p-2 rounded-lg transition-colors ${
+                useApiData
+                  ? 'bg-green-600/50 hover:bg-green-700/50'
+                  : 'bg-slate-800/50 hover:bg-slate-700/50'
+              }`}
+              title={useApiData ? 'Utilise l\'API - Cliquer pour données mockées' : 'Données mockées - Cliquer pour API'}
+            >
+              <Icon icon={RefreshCw} size={18} className={useApiData ? 'text-green-300' : 'text-slate-300'} />
+            </button>
+            <button
               onClick={() => router.push('/analytics')}
               className="p-2 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 transition-colors"
             >
               <Icon icon={BarChart3} size={18} className="text-slate-300" />
             </button>
-            <button 
+            <button
               onClick={() => router.push('/cards')}
               className="p-2 rounded-lg bg-slate-800/50 hover:bg-slate-700/50 transition-colors"
             >
@@ -126,16 +153,28 @@ export default function Dashboard() {
 
         {/* Balance Section - Exact Revolut style */}
         <div className="text-center space-y-4">
-          <p className="text-slate-400 text-sm">Personnel · EUR</p>
+          <div className="flex items-center justify-center space-x-2">
+            <p className="text-slate-400 text-sm">Personnel · EUR</p>
+            <div className={`px-2 py-1 rounded-full text-xs ${
+              useApiData ? 'bg-green-600/20 text-green-400' : 'bg-blue-600/20 text-blue-400'
+            }`}>
+              {useApiData ? 'API' : 'Mock'}
+            </div>
+          </div>
           <div className="text-7xl font-bold text-white">
             {showBalance ? `${formatBalance(totalBalance)} €` : '••••••'}
           </div>
-          <button 
+          <button
             onClick={handleToggleBalance}
             className="px-6 py-3 bg-slate-800/50 hover:bg-slate-700/50 rounded-xl text-white text-sm font-medium transition-colors"
           >
             Comptes et Portefeuilles
           </button>
+          {apiError && useApiData && (
+            <div className="mt-2 px-4 py-2 bg-red-600/20 border border-red-600/50 rounded-lg text-red-400 text-sm">
+              Erreur API: {apiError}
+            </div>
+          )}
         </div>
         
         {/* Carousel Indicators - 3 dots */}
