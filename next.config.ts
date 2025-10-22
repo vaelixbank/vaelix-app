@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'export',
+  // output: 'export', // Disabled for dynamic routes with client components
   trailingSlash: true,
   images: {
     unoptimized: true,

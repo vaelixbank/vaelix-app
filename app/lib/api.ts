@@ -89,6 +89,34 @@ export interface CardResponse {
   created_at: string;
 }
 
+export interface CardDetailsResponse {
+  id: string;
+  account_id: string;
+  card_type: 'virtual' | 'physical';
+  friendly_name: string;
+  card_number: string;
+  expiry_month: number;
+  expiry_year: number;
+  cvv: string;
+  status: 'active' | 'blocked' | 'expired' | 'cancelled';
+  created_at: string;
+  pin_set: boolean;
+}
+
+export interface BeneficiaryRequest {
+  name: string;
+  iban: string;
+  account_id?: string;
+}
+
+export interface BeneficiaryResponse {
+  id: string;
+  name: string;
+  iban: string;
+  account_id?: string;
+  created_at: string;
+}
+
 export interface SendMoneyRequest {
   account_id: string;
   amount: number;
@@ -224,8 +252,8 @@ class ApiClient {
     return this.request<CardResponse>(`/api/cards/${cardId}`);
   }
 
-  async getCardDetails(cardId: string): Promise<ApiResponse<any>> {
-    return this.request(`/api/cards/${cardId}/details`);
+  async getCardDetails(cardId: string): Promise<ApiResponse<CardDetailsResponse>> {
+    return this.request<CardDetailsResponse>(`/api/cards/${cardId}/details`);
   }
 
   async getCardsByAccount(accountId: string): Promise<ApiResponse<CardResponse[]>> {
@@ -267,15 +295,15 @@ class ApiClient {
   }
 
   // Beneficiaries
-  async createBeneficiary(beneficiaryData: any): Promise<ApiResponse<any>> {
-    return this.request('/api/beneficiaries', {
+  async createBeneficiary(beneficiaryData: BeneficiaryRequest): Promise<ApiResponse<BeneficiaryResponse>> {
+    return this.request<BeneficiaryResponse>('/api/beneficiaries', {
       method: 'POST',
       body: JSON.stringify(beneficiaryData),
     });
   }
 
-  async getBeneficiaries(): Promise<ApiResponse<any[]>> {
-    return this.request('/api/beneficiaries');
+  async getBeneficiaries(): Promise<ApiResponse<BeneficiaryResponse[]>> {
+    return this.request<BeneficiaryResponse[]>('/api/beneficiaries');
   }
 
   async deleteBeneficiary(beneficiaryId: string): Promise<ApiResponse<void>> {

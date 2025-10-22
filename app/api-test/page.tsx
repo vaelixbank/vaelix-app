@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Button } from '../components/ui/button';
 
 export default function ApiTestPage() {
-  const [results, setResults] = useState<Record<string, any>>({});
+  const [results, setResults] = useState<Record<string, string | number | boolean | null>>({});
   const [isLoading, setIsLoading] = useState(false);
 
   const testLogin = async () => {
@@ -137,9 +137,9 @@ export default function ApiTestPage() {
           <h2 className="text-xl font-semibold text-white mb-4">Instructions</h2>
           <div className="text-slate-300 space-y-2">
             <p>1. <strong>Démarrer le backend Rust:</strong> <code className="bg-slate-700 px-2 py-1 rounded text-sm">cd api && cargo run</code></p>
-            <p>2. <strong>Tester les endpoints:</strong> Cliquez sur les boutons ci-dessus pour tester l'API</p>
-            <p>3. <strong>Dashboard avec API:</strong> Allez sur /dashboard et cliquez sur l'icône refresh (🔄) pour basculer vers l'API</p>
-            <p>4. <strong>Données mockées:</strong> L'icône sera grise pour les données mockées, verte pour l'API</p>
+            <p>2. <strong>Tester les endpoints:</strong> Cliquez sur les boutons ci-dessus pour tester l&apos;API</p>
+            <p>3. <strong>Dashboard avec API:</strong> Allez sur /dashboard et cliquez sur l&apos;icône refresh (🔄) pour basculer vers l&apos;API</p>
+            <p>4. <strong>Données mockées:</strong> L&apos;icône sera grise pour les données mockées, verte pour l&apos;API</p>
           </div>
         </div>
       </div>
